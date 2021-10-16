@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8"/>
-    <title>Ceci n'est pas un document HTML</title>
+    <title>Tune Tracker</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
   </head>
   <body>
 
-    <h1>My first streamgraph in D3</h1>
+    <h1>Tune Tracker</h1>
+    <p id="subtitle">What makes a song popular?</p>
 
-    <svg id="viz"></svg>
+    <svg id="popularityLength"></svg>
+    <svg id="topArtists"></svg>
+    <svg id="correlations"></svg>
+    <svg id="timeline"></svg>
 
-    <script src="streamgraph.js"></script>
+    <script src="TuneTracker.js"></script>
   </body>
 </html>

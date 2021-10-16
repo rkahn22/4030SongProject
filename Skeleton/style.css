@@ -1,0 +1,31 @@
+html {
+    background-color: black;
+}
+
+body {
+    margin: 50px 100px 50px 100px;
+    background-color: #48937e;
+    height: 2000px;
+    border-style: solid;
+    border-width: 5px;
+    border-color: #96D406;
+    border-radius: 50px;
+}
+
+h1 {
+    text-align: center;
+    color: white;
+    font-family: Verdana;   
+    font-size: 85px;
+    line-height: 0;
+    padding-top: 20px;
+}
+
+#subtitle {
+    text-align: center;
+    color: white;
+    font-family: Verdana;
+    font-size: 30px;
+    font-style: italic;
+    line-height: 0;
+}
