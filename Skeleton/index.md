@@ -1,1 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8"/>
+    <title>Tune Tracker</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+  </head>
+  <body>
 
+    <h1>Tune Tracker</h1>
+    <p id="subtitle">What makes a song popular?</p>
+
+    <div id = "popLength">
+      <svg id="popularityLength"></svg>
+      <p class="caption">Does genre affect the number of weeks on the charts?</p>
+    </div>
+    <div id = "artists">
+      <svg id="topArtists"></svg>
+     <p class = "caption">Which artists are the top of their genre?</p>
+    </div>
+    <div id = "corr">
+      <svg id="correlations"></svg>
+      <p class="caption">How do song attributes correlate with its popularity?</p>
+    </div>
+    <div id = "time">
+      <svg id="timeline"></svg>
+      <p class="caption">Does timing affect the most popular genre?</p>
+    </div>
+
+    <script src="TuneTracker.js"></script>
+  </body>
+</html>
