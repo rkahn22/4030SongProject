@@ -1,0 +1,9 @@
+{"name": "top artists", "children":[
+    {"name":"pop", "children": [{"name":"Taylor Swift"}, {"name":"Justin Bieber"}, {"name":"BTS"}, {"name":"The Weeknd"}, {"name":"Drake"}]}, 
+    {"name":"hip hop", "children": [{"name":"Eminem"}, {"name":"Drake"}, {"name":"J. Cole"}, {"name":"Tyler, The Creator"}, {"name":"DaBaby"}]},
+    {"name":"rock", "children": [{"name":"Maroon 5"}, {"name":"Twenty One Pilots"}, {"name":"M\u00e5neskin"}, {"name":"Imagine Dragons"}, {"name":"Queen"}]},
+    {"name":"rap", "children": [{"name":"Lil Uzi Vert"}, {"name":"Juice WRLD"}, {"name":"Bad Bunny"}, {"name":"Eminem"}, {"name":"Drake"}]}, 
+    {"name":"trap", "children": [{"name":"Lil Uzi Vert"}, {"name":"Bad Bunny"}, {"name":"21 Savage, Metro Boomin"}, {"name":"Lil Baby"}, {"name":"Rauw Alejandro"}]}, 
+    {"name":"r&b", "children": [{"name":"The Weeknd"}, {"name":"Joji"}, {"name":"Tory Lanez"}, {"name":"Mariah Carey"}, {"name":"Ty Dolla $ign"}]}
+    ]
+}
