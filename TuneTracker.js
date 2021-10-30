@@ -62,8 +62,8 @@ var svgCorr = d3.select("#correlations")
             .style("width", corrDimensions.width)
             .style("height", corrDimensions.height)
             .style("background-color", "white")
-            .append("svg:image") // Image is used as a placeholder
-            .attr("xlink:href", "images/correlations.png")
+            //.append("svg:image") // Image is used as a placeholder
+            //.attr("xlink:href", "images/correlations.png")
 
 var svgTime = d3.select("#timeline")
             .style("width", timeDimensions.width)
