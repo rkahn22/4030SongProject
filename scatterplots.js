@@ -115,6 +115,15 @@ d3.csv("data/spotify_data.csv").then(function(data) {
             })
     })
 
+    svg.append("text")
+        .attr("x", dimensions.width / 2)
+        .attr("y", dimensions.height - 10)
+        .text("Streams (Millions)")
+        .style("fill", "gray")
+        .style("font-family", "Verdana")
+        .style("text-anchor", "middle")
+        .style("font-weight", "bold")
+
     var songInfo = d3.select("#songInfo")
                     .append("div")
                     .style("position", "absolute")
@@ -176,7 +185,7 @@ d3.csv("data/spotify_data.csv").then(function(data) {
             .on("click", function () {
                 // Need to reset all other circles before highlighting new ones.
 
-                
+
                 svg.selectAll("circle").each(function() {
                     d3.select(this)
                         .attr("fill", color(d3.select(this).attr("plot")))
