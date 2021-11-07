@@ -33,23 +33,23 @@ var timeDimensions = {
     }
 }
 
-var svgLength = d3.select("#popularityLength")
-            .style("width", lengthDimensions.width)
-            .style("height", lengthDimensions.height)
-            .style("background-color", "white")
-            .append("svg:image") // Image is used as a placeholder
-            .attr("xlink:href", "images/length.png")
+// var svgLength = d3.select("#popularityLength")
+//             .style("width", lengthDimensions.width)
+//             .style("height", lengthDimensions.height)
+//             .style("background-color", "white")
+//             .append("svg:image") // Image is used as a placeholder
+//             .attr("xlink:href", "images/length.png")
             
-var svgArtists = d3.select("#topArtists")
-            .style("width", artistsDimensions.width)
-            .style("height", artistsDimensions.height)
-            .style("background-color", "white")
-            .append("svg:image") // Image is used as a placeholder
-            .attr("xlink:href", "images/artists.png")
+// var svgArtists = d3.select("#topArtists")
+//             .style("width", artistsDimensions.width)
+//             .style("height", artistsDimensions.height)
+//             .style("background-color", "white")
+//             .append("svg:image") // Image is used as a placeholder
+//             .attr("xlink:href", "images/artists.png")
 
-var svgTime = d3.select("#timeline")
-            .style("width", timeDimensions.width)
-            .style("height", timeDimensions.height)
-            .style("background-color", "white") // This is just used as a placeholder
-            .append("svg:image")
-            .attr("xlink:href", "images/timeline.jpg")
+// var svgTime = d3.select("#timeline")
+//             .style("width", timeDimensions.width)
+//             .style("height", timeDimensions.height)
+//             .style("background-color", "white") // This is just used as a placeholder
+//             .append("svg:image")
+//             .attr("xlink:href", "images/timeline.jpg")

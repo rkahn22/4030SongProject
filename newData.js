@@ -1,4 +1,4 @@
-d3.csv("datawithdatesandgenrecorrect.csv").then(function(dataset){
+d3.csv("data/datawithdatesandgenrecorrect.csv").then(function(dataset){
 
   console.log(dataset)
 
@@ -320,6 +320,7 @@ var bars = svg.selectAll("rect")
     .attr("y", (d,i) => yScale(highestPositionData[i]))
     .attr("width", xScale.bandwidth())
     .attr("height", d => dimensions.height - dimensions.margin.bottom - yScale(d))
+    .attr("fill", "white")
 
 
 var xAxis = svg.append("g")
@@ -329,10 +330,15 @@ var xAxis = svg.append("g")
       .attr("transform", "rotate(-65)")
       .attr("dx", "-1.85em")
       .attr("dy", "0em")
+      .style("stroke", "white")
+      .attr("font-size", 15)
 
 var yAxis = svg.append("g")
       .call(yAxisgen)
       .style("transform", `translateX(${dimensions.margin.left}px)`)
+      .style("stroke", "white")
+      .attr("font-size", 15)
+
 
 
     d3.select("#Start").on('click', function(){
