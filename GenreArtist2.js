@@ -1,8 +1,8 @@
 d3.json("data/top_artists.json").then(function(dataset){
     console.log(dataset)
 
-    var width = 512
-    var height = 500
+    var width = 700
+    var height = 900
 
     // get topArtists svg
     var svg = d3.select('#topArtists')
@@ -10,34 +10,34 @@ d3.json("data/top_artists.json").then(function(dataset){
                 .style("height", height);
 
     var nodes =[
-        {name: "Pop", type:"Genre"},
-        {name: "Hip Hop", type:"Genre"},
-        {name: "Latin", type:"Genre"},
-        {name: "Rap", type:"Genre"},
-        {name: "Trap", type:"Genre"},
-        {name: "R&B", type:"Genre"},
-        {name: "Taylor Swift", type:"Artist"},
-        {name: "Justin Bieber", type:"Artist"},
-        {name: "BTS", type:"Artist"},
-        {name: "The Weeknd", type:"Artist"},
-        {name: "Drake", type:"Artist"},
-        {name: "Eminem", type:"Artist"},
-        {name: "J. Cole", type:"Artist"},
-        {name: "Tyler, The Creator", type:"Artist"},
-        {name: "DaBaby", type:"Artist"},
-        {name: "Lil Uzi Vert", type:"Artist"},
-        {name: "Juice WRLD", type:"Artist"},
-        {name: "Bad Bunny", type:"Artist"},
-        {name: "21 Savage", type:"Artist"},
-        {name: "Lil Baby", type:"Artist"},
-        {name: "Rauw Alejandro", type:"Artist"},
-        {name: "Joji", type:"Artist"},
-        {name: "Tory Lanez", type:"Artist"},
-        {name: "Mariah Carey", type:"Artist"},
-        {name: "Ty Dolla $ign", type:"Artist"},
-        {name: "J Balvin", type:"Artist"},
-        {name: "Maluma", type:"Artist"},
-        {name: "Anuel AA", type:"Artist"}
+        {name: "Pop", type:"Genre", value:819},
+        {name: "Hip Hop", type:"Genre", value:356},
+        {name: "Latin", type:"Genre", value:194},
+        {name: "Rap", type:"Genre", value:654},
+        {name: "Trap", type:"Genre", value:346},
+        {name: "R&B", type:"Genre", value:75},
+        {name: "Taylor Swift", type:"Artist", value:52},
+        {name: "Justin Bieber", type:"Artist", value:32},
+        {name: "BTS", type:"Artist", value:29},
+        {name: "The Weeknd", type:"Artist", value:21},
+        {name: "Drake", type:"Artist", value:19},
+        {name: "Eminem", type:"Artist", value:22},
+        {name: "J. Cole", type:"Artist", value:16},
+        {name: "Tyler, The Creator", type:"Artist", value:14},
+        {name: "DaBaby", type:"Artist", value:14},
+        {name: "Lil Uzi Vert", type:"Artist", value:32},
+        {name: "Juice WRLD", type:"Artist", value:30},
+        {name: "Bad Bunny", type:"Artist", value:28},
+        {name: "21 Savage", type:"Artist", value:12},
+        {name: "Lil Baby", type:"Artist", value:10},
+        {name: "Rauw Alejandro", type:"Artist", value:6},
+        {name: "Joji", type:"Artist", value:8},
+        {name: "Tory Lanez", type:"Artist", value:3},
+        {name: "Mariah Carey", type:"Artist", value:2},
+        {name: "Ty Dolla $ign", type:"Artist", value:2},
+        {name: "J Balvin", type:"Artist", value:9},
+        {name: "Maluma", type:"Artist", value:6},
+        {name: "Anuel AA", type:"Artist", value:5}
     ];
 
     var links = [
@@ -75,15 +75,15 @@ d3.json("data/top_artists.json").then(function(dataset){
 
     const simulation = d3.forceSimulation(nodes)
       .force("link", d3.forceLink(links).id(d => d.name).distance(200))
-      .force("collisions", d3.forceCollide(5))
+      .force("forcex", d3.forceX(d => d.type == "Genre" ? 300 : 700))
+      .force("collisions", d3.forceCollide(50))
       .force("charge", d3.forceManyBody())
       .force("center", d3.forceCenter(width / 2, height / 2))
-      .force("forcex", d3.forceX(d => d.type == "Genre" ? 200 : 600))
       .on('tick', ticked);
 
     const link = svg.append("g")
-      .attr("stroke", "darkgrey")
-      .attr("stroke-opacity", 1)
+      .attr("stroke", 'darkgrey')
+      .attr("stroke-opacity", 3)
         .selectAll("line")
         .data(links)
         .join("line")
@@ -96,9 +96,85 @@ d3.json("data/top_artists.json").then(function(dataset){
         .selectAll("circle")
         .data(nodes)
         .join("circle")
-      .attr("r", 8)
+      .attr("r", function(d){
+        if (d.type == 'Genre')
+          return (d.value / 10)
+        else
+          return (d.value / 2)
+      })
       .attr("cx", d=>d.x)
        .attr("cy", d=>d.y);
+       
+
+    node
+        .on('mouseover', function(d){
+          d3.select(this) // work on this specific node
+              //.attr('stroke-width', 2)
+              .attr("fill", '#1DB954');
+          
+          
+          // if you select a Genre node
+          if (d3.select(this)._groups[0][0].__data__.type == "Genre"){
+            genre = d3.select(this)._groups[0][0].__data__.name;
+            
+            
+            var connected = links.filter(function(e){
+              return e.source.name == genre
+            })
+
+            var targets = connected.map(function(z){
+              return z.target.name
+            })
+            
+            
+            node.attr("fill", function(d){
+              if (targets.includes(d.name) || d.name == genre)
+                return '#1DB954'
+              else
+                return 'black'
+            })
+            
+            link
+            .style("stroke", link_d => link_d.source.name == genre ? '#1DB954' : 'darkgrey')
+            .style('stroke-width', function (link_d) { return link_d.source.name === genre ? 2 : 1;})
+            
+          }
+          else{
+            artist = d3.select(this)._groups[0][0].__data__.name;
+
+            var connected = links.filter(function(e){
+              return e.target.name == artist
+            })
+
+            var sources = connected.map(function(z){
+              return z.source.name
+            })
+            
+            
+            node.attr("fill", function(d){
+              if (sources.includes(d.name) || d.name == artist)
+                return '#1DB954'
+              else
+                return 'black'
+            })
+
+            link
+              .style("stroke", link_d => link_d.target.name == artist ? '#1DB954' : 'darkgrey')
+              .style('stroke-width', function (link_d) { return link_d.target.name === artist ? 2 : 1;});
+
+          }
+      
+        })
+        .on('click', function(){
+          d3.select(this)
+              .attr("fill", '#1DB954');
+        })
+        .on('mouseout', function(){
+          node.attr("fill", "black");
+          link
+            .style('stroke', 'darkgrey')
+            .style('stroke-width', 1);
+        }); 
 
     node.append("title")
       .text(d => d.name);
@@ -109,25 +185,28 @@ d3.json("data/top_artists.json").then(function(dataset){
                 .join("text")
                     .attr("dx", 12)
                     .attr("dy", ".35em")
+                    .attr("font-size", d=> d.type == 'Genre' ? 20: 12)
+                    .attr("font-family", "Verdana")
+                    .attr("text-anchor", d=> d.type == 'Genre' ? 'end': 'start')
                     .text(function(d) { return d.name });
 
-
+    
     
     function ticked(){
         // take all the circles
         svg.selectAll("circle")
-            .attr("cx", d=>d.x) // change x pos 
+            .attr("cx", d => d.type == "Genre" ? 300 : 500) // change x pos 
             .attr("cy", d=>d.y) // change y pos
-    
+  
         // update all lines
         svg.selectAll("line")
-        .attr("x1", d=>d.source.x)
+        .attr("x1", 300)
         .attr("y1", d=>d.source.y)
-        .attr("x2", d=>d.target.x)
+        .attr("x2", 500)
         .attr("y2", d=>d.target.y)
 
         svg.selectAll("text")
-            .attr("x", d => d.x)
+            .attr("x", d => d.type == "Genre" ? 200 : 520)
             .attr("y", d => d.y);
     }
 })
