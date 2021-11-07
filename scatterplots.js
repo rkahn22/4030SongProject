@@ -1,51 +1,50 @@
 d3.csv("data/spotify_data.csv").then(function(data) {
     // Number of both rows and columns
-    var nRows = 2
-    var nCols = 3 
+    var nRows = 3
+    var nCols = 1 
 
     var dimensions = {
-        width: 800,
-        height: 610,
+        width: 900,
+        height: 660,
         margin: {
             top: 10,
             bottom: 50,
             right: 10,
             left: 60
         },
-        subMargin: 10
+        subMargin: 20
     }
 
     var subplotDim = {
-        width: (dimensions.width - (4*dimensions.subMargin) - dimensions.margin.left) / nCols,
+        width: (dimensions.width - (dimensions.subMargin) - dimensions.margin.left) / nCols,
         height: (dimensions.height - (3*dimensions.subMargin) - dimensions.margin.bottom) / nRows
     }
 
-    var svg = d3.select("#correlations")
+    var svg = d3.select("#scattersub")
                 .style("width", dimensions.width)
                 .style("height", dimensions.height)
+                .style("background", "black")
 
     console.log(data)
 
-    var attributes = ['Danceability', 'Acousticness', 'Energy', 
-                        'Speechiness', 'Liveness', 'Valence']
+    var attributes = ['Danceability', 'Acousticness', 'Energy']
 
     console.log(attributes)
 
     xScales = []
     yScales = []
 
-    var yAccessor = d => parseFloat(d.Streams.replace(/,/g, ''))
+    var xAccessor = d => parseFloat(d.Streams.replace(/,/g, ''))
     // Create x scales by adding the subplot dimensions
     for(i = 0; i < nCols; i++) {
-        xScales.push(d3.scaleLinear()
-                        .domain([0, 1])
-                        .range([dimensions.margin.left + (dimensions.subMargin*(i+1)) + (subplotDim.width*i), 
-                            dimensions.margin.left + (dimensions.subMargin*i) + (subplotDim.width*(i+1))]))
+        xScales.push(d3.scaleLog()
+                        .domain(d3.extent(data, xAccessor))
+                        .range([dimensions.margin.left, dimensions.width - dimensions.margin.right]))
     }
     // Create y scales by adding the subplot dimensions
     for(i = 0; i < nRows; i++) {
         yScales.push(d3.scaleLinear()
-                        .domain([0, 600])
+                        .domain([0, 1])
                         .range([(dimensions.subMargin*i) + (subplotDim.height*(i+1)), 
                             (dimensions.subMargin*(i+1)) + (subplotDim.height*i)]))
     }
@@ -56,37 +55,14 @@ d3.csv("data/spotify_data.csv").then(function(data) {
             y: yScales[0]
         },
         Acousticness: {
-            x: xScales[1],
-            y: yScales[0]
-        },
-        Energy: {
-            x: xScales[2],
-            y: yScales[0]
-        },
-        Speechiness: {
             x: xScales[0],
             y: yScales[1]
         },
-        Liveness: {
-            x: xScales[1],
-            y: yScales[1]
-        },
-        Valence: {
-            x: xScales[2],
-            y: yScales[1]
+        Energy: {
+            x: xScales[0],
+            y: yScales[2]
         }
     }
-
-    var bins = {}
-    // Create a mapping of the binned data for each attribute
-    attributes.forEach(element => {
-        var histogram = d3.histogram()
-                            .value(function(d) { return d[element] })
-                            .domain(attrScales[element].x.domain())
-                            .thresholds(attrScales[element].x.ticks(30))
-        
-        bins[element] = histogram(data)
-    })
     // Plot x scales
     xScales.forEach(element => {
         svg.append("g")
@@ -104,46 +80,144 @@ d3.csv("data/spotify_data.csv").then(function(data) {
 
     var color = d3.scaleOrdinal(d3.schemeCategory10)
                     .domain(attributes)
-                    
-    // Gets the correct height for the bar.
-    function getHeight(subplotHeight, barHeight) {
-        // If using subplotHeight results in a negative, we assume this subplot is on the next row.
-        if (subplotHeight + dimensions.subMargin - barHeight > 0) return subplotHeight - barHeight
-        else return (subplotHeight * 2) + dimensions.subMargin - barHeight
+
+    var attributeInfo = d3.select("#scatterplots")
+                            .append("div")
+                            .style("position", "absolute")
+                            .style("visibility", "hidden")
+                            .style("white-space", "pre-line")
+                            .classed("tooltip", true)
+    
+    var attrDescriptions = {"Danceability": "Danceability describes how suitable a track is for dancing based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity. A value of 0.0 is least danceable and 1.0 is most danceable.",
+        "Acousticness": "A measure from 0.0 to 1.0 of whether the track is acoustic.",
+        "Energy": "Energy is a measure from 0.0 to 1.0 and represents a perceptual measure of intensity and activity. Typically, energetic tracks feel fast, loud, and noisy."
     }
-    // Plot all bars
-    attributes.forEach(element => {
-        svg.selectAll(element)
-            .data(bins[element])
-            .enter()
-            .append("rect")
-            .attr("x", 1)
-            .attr("transform", d => "translate(" + attrScales[element].x(d.x0) + "," + attrScales[element].y(d.length) + ")")
-            .attr("width", d => attrScales[element].x(d.x1) - attrScales[element].x(d.x0) - 1)
-            .attr("height", d=> getHeight(subplotDim.height, attrScales[element].y(d.length)))
-            .style("fill", color(element))
-    })
+
+    console.log(attrDescriptions)
 
     attributes.forEach(element => {
         svg.append("text")
-            .attr("x", attrScales[element].x(.35))
-            .attr("y", attrScales[element].y(550))
+            .attr("x", dimensions.width / 2)
+            .attr("y", attrScales[element].y(1.0))
             .text(element)
-            .style("fill", "black")
+            .style("fill", "gray")
             .style("font-family", "Verdana")
-        }
-    )}
+            .style("text-anchor", "middle")
+            .style("font-weight", "bold")
+            .on('mouseover', function() {
+                attributeInfo.style("visibility", "visible")
+                            .style("left", d3.select(this).attr("x") + "px")
+                            .style("top", (d3.select(this).attr("y") - 15) + "px")
+                            .text(attrDescriptions[d3.select(this).text()])
+            })
+            .on('mouseout', function() {
+                attributeInfo.style("visibility", "hidden")
+            })
+    })
 
-   /*attributes.forEach(element => {
-        svg.selectAll(element)
+    var songInfo = d3.select("#songInfo")
+                    .append("div")
+                    .style("position", "absolute")
+                    .style("visibility", "visible")
+                    .style("white-space", "pre-line")
+                    .classed("tooltip", true)
+
+    var clickedData = null
+    var genreFilter = "all"
+
+   attributes.forEach(element => {
+        var dots = svg.selectAll(element)
             .data(data)
             .enter()
             .append("circle")
-            .attr("cx", d => attrScales[element].x(+d[element]))
-            .attr("cy", d => attrScales[element].y(yAccessor(d)))
+            .attr("cx", d => attrScales[element].x(xAccessor(d)))
+            .attr("cy", d => attrScales[element].y(+d[element]))
             .attr("fill", color(element))
-            .attr("id", element)
-            .attr("r", 2)
-    })*/
+            .attr("id", d => d['Song ID'])
+            .attr("plot", element)
+            .attr("r", 4)
+            .style("opacity", .6)
+            .on('mouseover', function() {
+                d3.select(this)
+                    .attr("fill", "white")
+                
+                var hoverData = d3.select(this).data()[0]
+                
+                songInfo
+                    .style("visibility", "visible")
+                    .text(hoverData["Song Name"] + " by " + hoverData["Artist"] + "\n" +
+                        "Danceability: " + hoverData['Danceability'] + "\n" +
+                        "Acousticness " + hoverData['Acousticness'] + "\n" + 
+                        "Energy: " + hoverData['Energy'] + "\n" +
+                        "Streams: " + hoverData['Streams'] + "\n" +
+                        "Highest Charting Position: " + hoverData['Highest Charting Position'] + "\n"
+                    )
+            })
+            .on("mouseout", function () {
+                // Only want to reset if its not the clicked point, AKA the r size is 6.
+                if (d3.select(this).attr("r") != 6) {
+                    d3.select(this)
+                        .attr("fill", color(d3.select(this).attr("plot")))
+                }
+                // Reset to songdata of clicked point.
+                if (clickedData != null) {
+                    songInfo
+                        .style("visibility", "visible")
+                        .text(clickedData["Song Name"] + " by " + clickedData["Artist"] + "\n" +
+                            "Danceability: " + clickedData['Danceability'] + "\n" +
+                            "Acousticness " + clickedData['Acousticness'] + "\n" + 
+                            "Energy: " + clickedData['Energy'] + "\n" +
+                            "Streams: " + clickedData['Streams'] + "\n" +
+                            "Highest Charting Position: " + clickedData['Highest Charting Position'] + "\n"
+                        )
+                }
 
-)
+            })
+            .on("click", function () {
+                // Need to reset all other circles before highlighting new ones.
+
+                
+                svg.selectAll("circle").each(function() {
+                    d3.select(this)
+                        .attr("fill", color(d3.select(this).attr("plot")))
+                        .attr("r", 4)
+                        .style("opacity", .6)
+                })
+                // Create string to set ID. For some reason #id does not work.     
+                var id = d3.select(this).attr("id")
+                id = "[id='" + id + "']"
+                
+                var clickedPoints = d3.selectAll(id).transition().duration(500)
+                    .attr("fill", "white")
+                    .attr("r", 6)
+                    .style("opacity", 1.0)
+
+                clickedData = d3.select(this).data()[0]
+
+                songInfo.style("visibility", "visible")
+                        .text(clickedData["Song Name"] + " by " + clickedData["Artist"] + "\n" +
+                        "Danceability: " + clickedData['Danceability'] + "\n" +
+                        "Acousticness " + clickedData['Acousticness'] + "\n" + 
+                        "Energy: " + clickedData['Energy'] + "\n" +
+                        "Streams: " + clickedData['Streams'] + "\n" +
+                        "Highest Charting Position: " + clickedData['Highest Charting Position'] + "\n"
+                    )
+                
+            })
+
+
+    })
+
+    d3.select("#genres").on('change', function() {
+        genreFilter = d3.select(this).property("value")
+
+        svg.selectAll("circle").transition().duration(1000)
+            .attr("r", d => {
+                if(genreFilter == 'all')
+                    return 4
+                else if(d['General_Genre'].includes(genreFilter))
+                    return 4
+                else return 0
+            })
+    })
+})
