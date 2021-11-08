@@ -48,7 +48,7 @@ h1 {
 #popLength {
     position: absolute;
     top: 2150px;
-    left: 100px;
+    left: 0px;
     text-anchor: middle;
 }
 
