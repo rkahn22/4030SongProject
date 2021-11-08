@@ -1,4 +1,4 @@
-d3.csv("datawithdatesandgenrecorrect.csv").then(function(dataset){
+d3.csv("data/datawithdatesandgenrecorrect.csv").then(function(dataset){
 
   //console.log(dataset)
 
