@@ -1,6 +1,6 @@
-d3.csv("data/datawithdatesandgenrecorrect.csv").then(function(dataset){
+d3.csv("datawithdatesandgenrecorrect.csv").then(function(dataset){
 
-  console.log(dataset)
+  //console.log(dataset)
 
   var dimensions = {
       width: 600,
@@ -67,7 +67,7 @@ d3.csv("data/datawithdatesandgenrecorrect.csv").then(function(dataset){
     for (var i = 0; i<dataset.length;i++){
         genreName.push(dataset[i][name])
     }
-    console.log(genreName)
+    //console.log(genreName)
 
           //get the values
     for (var i = 0; i<dataset.length;i++){
@@ -286,13 +286,8 @@ d3.csv("data/datawithdatesandgenrecorrect.csv").then(function(dataset){
 
 
     const genresChart = ["country", "folk", "funk", "hip hop", "indie", "jazz", "latin", "pop", "punk", "r&b", "rock", "soul"]
-    const num = [1,2,3,4,5,6,7,8,9,10,11,12]
     const highestPositionData = [countryPosAvg, folkPosAvg, funkPosAvg, hiphopPosAvg, indiePosAvg, jazzPosAvg, latinPosAvg, popPosAvg, punkPosAvg, rbPosAvg, rockPosAvg, soulPosAvg]
     const timesChartedData = [countryTimesCharted, folkTimesCharted, funkTimesCharted, hiphopTimesCharted, indieTimesCharted, jazzTimesCharted, latinTimesCharted, popTimesCharted, punkTimesCharted, rbTimesCharted, rockTimesCharted, soulTimesCharted]
-
-    console.log(genresChart)
-    console.log(highestPositionData)
-    console.log(timesChartedData)
 
 
 var xScale = d3.scaleBand()
@@ -306,11 +301,11 @@ var yScale = d3.scaleLinear()
 
 var xAxisgen = d3.axisBottom()
         .scale(xScale)
-        // .tickFormat((interval,i) => {
-        //     return i%3 !== 0 ? " ": interval;})
 
 var yAxisgen = d3.axisLeft().scale(yScale)
 
+var g = svg.append("g")
+            .attr("transform", "translate(" + 100 + "," + 100 + ")");
 
 var bars = svg.selectAll("rect")
     .data(highestPositionData)
@@ -320,7 +315,6 @@ var bars = svg.selectAll("rect")
     .attr("y", (d,i) => yScale(highestPositionData[i]))
     .attr("width", xScale.bandwidth())
     .attr("height", d => dimensions.height - dimensions.margin.bottom - yScale(d))
-    .attr("fill", "white")
 
 
 var xAxis = svg.append("g")
@@ -330,133 +324,50 @@ var xAxis = svg.append("g")
       .attr("transform", "rotate(-65)")
       .attr("dx", "-1.85em")
       .attr("dy", "0em")
-      .style("stroke", "white")
-      .attr("font-size", 15)
 
 var yAxis = svg.append("g")
       .call(yAxisgen)
       .style("transform", `translateX(${dimensions.margin.left}px)`)
-      .style("stroke", "white")
-      .attr("font-size", 15)
+
+//greatest to least
+// const newDescendingOrder = highestPositionData.sort(function(a,b){return b-a})
+// console.log(newDescendingOrder)
+// const newDescendinggenresChart = ["funk", "country", "jazz", "soul", "rock", "hip hop", "indie", "r&b", "pop", "latin", "punk", "folk"]
+// //least to greatest
+// const newAscendingOrder = highestPositionData.sort(function(a,b){return a-b})
+// const newAscendinggenresChart = ["folk", "punk", "latin", "pop", "r&b", "indie", "hip hop", "rock", "soul", "jazz", "country", "funk"]
+
+// console.log(newAscendingOrder)
+// console.log(newAscendinggenresChart)
 
 
-
-    d3.select("#Start").on('click', function(){
-        xScale
-            .domain(d3.extent(dataset, xAccessorNew)) //want to use temp not cloud cover anymore, modify xScale to have new domain which is defined as xAccessorNew
-        
-        xAxisgen.scale(xScale)
-
-        xAxis.transition().duration(5000)
-        .call(xAxisgen)
-
-        dots.transition().duration(5000) //5 seconds
-            .attr("cx", d => xScale(xAccessorNew(d)))
-    })
-
-    d3.select("#Reset").on('click', function(){
-        xScale
-            .domain(d3.extent(dataset, xAccessor))
-        
-        xAxisgen.scale(xScale)
-
-        xAxis.transtion().duration(5000)
-            .call(xAxisgen)
-
-        dots.transition().duration(5000)
-            .attr("cx", d => xScale(xAccessor(d)))
-            .attr("r", 8)
-    })
-
-    // const arrAvg = diff_in_weeks => diff_in_weeks.reduce((a,b) => a + b, 0) / diff_in_weeks.length
-    // console.log(arrAvg)
-
-    // console.log(countryWeeksStart)
-    // console.log(countryWeeksEnd)
-
-    // console.log(country)
-    // console.log(folk)
-    // console.log(funk)
-    // console.log(hiphop)
-    // console.log(indie)
-    // console.log(jazz)
-    // console.log(latin)
-    // console.log(pop)
-    // console.log(punk)
-    // console.log(rb)
-    // console.log(rap)
-    // console.log(rock)
-    // console.log(soul)
-
-// var xScale = d3.scaleLinear()
-//     .domain([0, d3.max(genresWeeksChart)])
-//     .range([dimensions.margin.left, dimensions.width - dimensions.margin.right])
+    //times charted data
+d3.select("#timescharted").on('click', function(){
+    yScale
+        .domain([0, d3.max(timesChartedData)])
+    yAxisgen.scale(yScale)
+    yAxis.transition().duration(5000)
+    .call(yAxisgen)
     
+    bars.transition().duration(5000)
+        .attr("y", (d,i) => yScale(timesChartedData[i]))
+        .attr("height", (d,i) => dimensions.height - dimensions.margin.bottom - yScale(timesChartedData[i]))
 
-// var yScale = d3.scaleBand()
-//     .domain(genresChart)
-//     .range([dimensions.height - dimensions.margin.bottom, dimensions.margin.top])
-//     .padding(0.2)
+    })
 
-// svg.append("g")
-//     .call(d3.axisLeft(yScale))
+    //back to highest position
+    d3.select("#highestpos").on('click', function(){
+        yScale
+            .domain([0, d3.max(highestPositionData)])
+        yAxisgen.scale(yScale)
+        yAxis.transition().duration(5000)
+            .call(yAxisgen)
+    
+    bars.transition().duration(5000)
+        .attr("y", (d,i) => yScale(highestPositionData[i]))
+        .attr("height", d => dimensions.height - dimensions.margin.bottom - yScale(d))
+    })
 
-// var yAxisgen = d3.axisLeft()
-//         .scale(xScale)
-//         //.tickFormat((interval,i) => {interval;})
-
-// var xAxisgen = d3.axisBottom().scale(yScale)
-
-
-// var bars = svg.selectAll("rect")
-//     .data(genresWeeksChart)
-//     .enter()
-//     .append("rect")
-//     .attr("x", (d,i) => xScale(genresWeeksChart[i]))
-//     .attr("y", (d,i) => yScale(genresChart[i]))
-//     .attr("width", d => dimensions.width - dimensions.margin.right - xScale(d))
-//     .attr("height", yScale.bandwidth())
-//     .attr("fill", "#69b3a2")
-
-
-// var xAxis = svg.append("g")
-//     .call(xAxisgen)
-//     .style("transform", `translateY(${dimensions.height - dimensions.margin.bottom}px)`)
-
-// var yAxis = svg.append("g")
-//     .call(yAxisgen)
-//     .style("transform", `translateX(${dimensions.margin.left- dimensions.margin.right}px)`)
-//     .selectAll("text")
-//     //.attr("transform", "rotate(-65)")
-//     .attr("dx", "-1.85em")
-//     .attr("dy", "0em")
-
-//     d3.select("#Start").on('click', function(){
-//         xScale
-//             .domain(d3.extent(dataset, xAccessorNew)) //want to use temp not cloud cover anymore, modify xScale to have new domain which is defined as xAccessorNew
-        
-//         xAxisgen.scale(xScale)
-
-//         xAxis.transition().duration(5000)
-//         .call(xAxisgen)
-
-//         dots.transition().duration(5000) //5 seconds
-//             .attr("cx", d => xScale(xAccessorNew(d)))
-//     })
-
-//     d3.select("#Reset").on('click', function(){
-//         xScale
-//             .domain(d3.extent(dataset, xAccessor))
-        
-//         xAxisgen.scale(xScale)
-
-//         xAxis.transtion().duration(5000)
-//             .call(xAxisgen)
-
-//         dots.transition().duration(5000)
-//             .attr("cx", d => xScale(xAccessor(d)))
-//             .attr("r", 8)
-//     })
 
 
  })
