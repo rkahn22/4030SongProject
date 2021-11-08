@@ -48,14 +48,14 @@ h1 {
 #popLength {
     position: absolute;
     top: 2150px;
-    left: 0px;
+    left: 250px;
     text-anchor: middle;
 }
 
 #artists {
     position: absolute;
     top: 1100px;
-    left: 450px;
+    left: 250px;
     text-anchor: middle;
 }
 
