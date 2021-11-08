@@ -315,6 +315,7 @@ var bars = svg.selectAll("rect")
     .attr("y", (d,i) => yScale(highestPositionData[i]))
     .attr("width", xScale.bandwidth())
     .attr("height", d => dimensions.height - dimensions.margin.bottom - yScale(d))
+    .attr("fill", "white")
 
 
 var xAxis = svg.append("g")
@@ -324,10 +325,14 @@ var xAxis = svg.append("g")
       .attr("transform", "rotate(-65)")
       .attr("dx", "-1.85em")
       .attr("dy", "0em")
+      .style("stroke", "white")
+      .style("font-size", 15)
 
 var yAxis = svg.append("g")
       .call(yAxisgen)
       .style("transform", `translateX(${dimensions.margin.left}px)`)
+      .style("stroke", "white")
+      .style("font-size", 15)
 
 //greatest to least
 // const newDescendingOrder = highestPositionData.sort(function(a,b){return b-a})
