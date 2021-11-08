@@ -26,11 +26,8 @@ d3.csv("data/spotify_data.csv").then(function(data) {
                 .style("background", "black")
 
     console.log(data)
-
+    // Three attributes to use for subplots.
     var attributes = ['Danceability', 'Acousticness', 'Energy']
-
-    console.log(attributes)
-
     xScales = []
     yScales = []
 
@@ -68,19 +65,24 @@ d3.csv("data/spotify_data.csv").then(function(data) {
         svg.append("g")
             .call(d3.axisBottom().scale(element))
             .style("transform", `translateY(${dimensions.height-dimensions.margin.bottom}px)`)
-            .style("stroke", "gray")
+            .style("stroke", "white")
+        .select(".domain")
+            .attr("stroke", "white")
     })
     // Plot y scales
     yScales.forEach(element => {
         svg.append("g")
             .call(d3.axisLeft().scale(element))
             .style("transform", `translateX(${dimensions.margin.left}px)`)
-            .style("stroke", "gray")
+            .style("stroke", "white")
+        .select(".domain")
+            .attr("stroke", "white")
     })
 
     var color = d3.scaleOrdinal(d3.schemeCategory10)
                     .domain(attributes)
 
+    // Create hidden text box for attribute descriptions
     var attributeInfo = d3.select("#scatterplots")
                             .append("div")
                             .style("position", "absolute")
@@ -93,21 +95,20 @@ d3.csv("data/spotify_data.csv").then(function(data) {
         "Energy": "Energy is a measure from 0.0 to 1.0 and represents a perceptual measure of intensity and activity. Typically, energetic tracks feel fast, loud, and noisy."
     }
 
-    console.log(attrDescriptions)
-
+    // Set all x-axis labels
     attributes.forEach(element => {
         svg.append("text")
             .attr("x", dimensions.width / 2)
             .attr("y", attrScales[element].y(1.0))
             .text(element)
-            .style("fill", "gray")
+            .style("fill", "white")
             .style("font-family", "Verdana")
             .style("text-anchor", "middle")
             .style("font-weight", "bold")
             .on('mouseover', function() {
                 attributeInfo.style("visibility", "visible")
-                            .style("left", d3.select(this).attr("x") + "px")
-                            .style("top", (d3.select(this).attr("y") - 15) + "px")
+                            .style("left", parseInt(d3.select(this).attr("x")) + 200 + "px")
+                            .style("top", parseInt(d3.select(this).attr("y")) - 30 + "px")
                             .text(attrDescriptions[d3.select(this).text()])
             })
             .on('mouseout', function() {
@@ -115,25 +116,28 @@ d3.csv("data/spotify_data.csv").then(function(data) {
             })
     })
 
+    // Set x-axis label
     svg.append("text")
         .attr("x", dimensions.width / 2)
         .attr("y", dimensions.height - 10)
         .text("Streams (Millions)")
-        .style("fill", "gray")
+        .style("fill", "white")
         .style("font-family", "Verdana")
         .style("text-anchor", "middle")
         .style("font-weight", "bold")
-
+        
+    // Set textbox for song info in corner.
     var songInfo = d3.select("#songInfo")
                     .append("div")
                     .style("position", "absolute")
-                    .style("visibility", "visible")
+                    .style("visibility", "hidden")
                     .style("white-space", "pre-line")
                     .classed("tooltip", true)
 
     var clickedData = null
     var genreFilter = "all"
 
+    // Plot all circles
    attributes.forEach(element => {
         var dots = svg.selectAll(element)
             .data(data)
@@ -151,7 +155,7 @@ d3.csv("data/spotify_data.csv").then(function(data) {
                     .attr("fill", "white")
                 
                 var hoverData = d3.select(this).data()[0]
-                
+                // Update song info to point being hovered over
                 songInfo
                     .style("visibility", "visible")
                     .text(hoverData["Song Name"] + " by " + hoverData["Artist"] + "\n" +
@@ -179,17 +183,21 @@ d3.csv("data/spotify_data.csv").then(function(data) {
                             "Streams: " + clickedData['Streams'] + "\n" +
                             "Highest Charting Position: " + clickedData['Highest Charting Position'] + "\n"
                         )
-                }
+                } else songInfo.style("visibility", "hidden")
 
             })
             .on("click", function () {
                 // Need to reset all other circles before highlighting new ones.
 
-
                 svg.selectAll("circle").each(function() {
                     d3.select(this)
                         .attr("fill", color(d3.select(this).attr("plot")))
-                        .attr("r", 4)
+                        // Only set size back to 4 if they fit the filter.
+                        .attr("r", function() { 
+                                if (genreFilter == "all") return 4 
+                                else if (d3.select(this).data()[0]['General_Genre'].includes(genreFilter)) return 4
+                                else return 0
+                            })
                         .style("opacity", .6)
                 })
                 // Create string to set ID. For some reason #id does not work.     
@@ -200,9 +208,9 @@ d3.csv("data/spotify_data.csv").then(function(data) {
                     .attr("fill", "white")
                     .attr("r", 6)
                     .style("opacity", 1.0)
-
+                // Store clicked data to be used in other interactions
                 clickedData = d3.select(this).data()[0]
-
+                // Reset text of song info
                 songInfo.style("visibility", "visible")
                         .text(clickedData["Song Name"] + " by " + clickedData["Artist"] + "\n" +
                         "Danceability: " + clickedData['Danceability'] + "\n" +
@@ -213,13 +221,22 @@ d3.csv("data/spotify_data.csv").then(function(data) {
                     )
                 
             })
-
-
     })
 
+    genres = ["All", "Country", "Folk", "Funk", "Hip Hop", "Indie", 
+                "Jazz", "Latin", "Pop", "Punk", "R&B", "Rock", "Soul"]
+    // Create genre options in dropdown select
+    d3.select("#genres").selectAll("option")
+        .data(genres)
+        .enter()
+        .append("option")
+        .text(d => d)
+        .attr("value", d => d.toLowerCase())
+
+    // Update when select is changed.
     d3.select("#genres").on('change', function() {
         genreFilter = d3.select(this).property("value")
-
+        // Shrink all points not in filter to 0
         svg.selectAll("circle").transition().duration(1000)
             .attr("r", d => {
                 if(genreFilter == 'all')

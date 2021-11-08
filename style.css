@@ -62,15 +62,15 @@ h1 {
 #scatterplots {
     position: absolute;
     top: 300px;
-    left: 190px;
+    left: 0px;
     width: 1150px;
     text-anchor: middle;
 }
 
 #songInfo {
-    position: relative;
-    top: 0px;
-    left: 900px;
+    position: absolute;
+    top: 175px;
+    left: 950px;
     margin: 0;
 }
 
@@ -88,7 +88,14 @@ h1 {
 }
 
 #genres {
-    position: relative;
+    position: absolute;
     top: 0px;
-    left: 900px;
+    left: 1000px;
+    background: black;
+    color: white;
+    font-family: Verdana;
+    font-size: 12px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: white;
 }
