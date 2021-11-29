@@ -363,7 +363,7 @@ svg.append('text')
       .attr('y', dimensions.height-30)
       .attr('text-anchor', 'center')
       .text('General Genres')
-      .style("fill", "#000000")
+      .style("stroke", "white")
 
 var yAxis = svg.append("g")
       .call(yAxisgen)
@@ -377,7 +377,7 @@ svg.append('text')
       .attr('text-anchor', 'end')
       .attr('transform', 'rotate(-90)')
       .text(yAxisLabel) 
-      .style("fill", "#000000")
+      .style("stroke", "white")
       
 
 
