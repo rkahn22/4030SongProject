@@ -328,7 +328,7 @@ var bars = svg.selectAll("rect")
     .on('mouseenter', function(actual,i){
         d3.select(this).attr('opacity', 0.5)
         //.attr('width', xScale.bandwidth()+7)
-        .attr('stroke', 'white')
+        .attr('stroke', '#000000')
         .attr('stroke-width', '3')
     })
     .on('mouseleave', function(actual,i){
@@ -363,7 +363,7 @@ svg.append('text')
       .attr('y', dimensions.height-30)
       .attr('text-anchor', 'center')
       .text('General Genres')
-      .style("stroke", "white")
+      .style("fill", "#000000")
 
 var yAxis = svg.append("g")
       .call(yAxisgen)
@@ -377,7 +377,7 @@ svg.append('text')
       .attr('text-anchor', 'end')
       .attr('transform', 'rotate(-90)')
       .text(yAxisLabel) 
-      .style("stroke", "white")
+      .style("fill", "#000000")
       
 
 
