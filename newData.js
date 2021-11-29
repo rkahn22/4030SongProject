@@ -328,7 +328,7 @@ var bars = svg.selectAll("rect")
     .on('mouseenter', function(actual,i){
         d3.select(this).attr('opacity', 0.5)
         //.attr('width', xScale.bandwidth()+7)
-        .attr('stroke', 'black')
+        .attr('stroke', 'white')
         .attr('stroke-width', '3')
     })
     .on('mouseleave', function(actual,i){
