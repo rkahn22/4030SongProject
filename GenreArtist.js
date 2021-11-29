@@ -4,15 +4,7 @@ d3.json("data/top_artists.json").then(function(dataset){
     console.log(dataset)
 
     var width = 900
-    var height = 900
-    var padding = 1.5, // separation between same-color nodes
-        clusterPadding = 6, // separation between different-color nodes
-        maxRadius = 8;
-
-    var n = 28, // total number of nodes
-        m = 2; // number of distinct clusters
-
-    
+    var height = 800
 
     // get topArtists svg
     var svg = d3.select('#topArtists')
@@ -168,7 +160,7 @@ d3.json("data/top_artists.json").then(function(dataset){
       .force("link", d3.forceLink(links).id(d => d.name).distance(500))
       .force("collisions", d3.forceCollide(d => d.type == "Genre" ? ((d.value / 8)+17) : (d.value / 2)+17))
       .force("forceY", d3.forceY(d => d.type == "Genre" ? 200 : 700))
-      .force("center", d3.forceCenter(width / 2, height / 2))
+      .force("center", d3.forceCenter(width / 2, height / 1.5))
       .on('tick', ticked);
 
     const link = svg.append("g")
