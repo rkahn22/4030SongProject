@@ -1,3 +1,5 @@
+genreFilter = "all"
+
 d3.csv("data/spotify_data.csv").then(function(data) {
     // Number of both rows and columns
     var nRows = 1
@@ -105,7 +107,7 @@ d3.csv("data/spotify_data.csv").then(function(data) {
                     .classed("tooltip", true)
 
     var clickedData = null
-    var genreFilter = "all"
+    
 
     var plots = ["plot1", "plot2", "plot3"]
 
@@ -228,7 +230,7 @@ d3.csv("data/spotify_data.csv").then(function(data) {
         .attr("value", d => d)
     // First plot select tool
     d3.select("#attrSelect1")
-        .style("left", attrScales["plot1"].x(.5) + "px")
+        .style("left", attrScales["plot1"].x(.5) + 70 + "px")
         .property("value", attrScales["plot1"].attr)
         .on('change', function() {
             attrScales["plot1"].attr = d3.select(this).property("value")
@@ -239,7 +241,7 @@ d3.csv("data/spotify_data.csv").then(function(data) {
         })
     // Second plot select tool
     d3.select("#attrSelect2")
-        .style("left", attrScales["plot2"].x(.5) + "px")
+        .style("left", attrScales["plot2"].x(.5) + 70 + "px")
         .property("value", attrScales["plot2"].attr)
         .on('change', function() {
             attrScales["plot2"].attr = d3.select(this).property("value")
@@ -253,7 +255,7 @@ d3.csv("data/spotify_data.csv").then(function(data) {
         })
     // Third plot select tool
     d3.select("#attrSelect3")
-        .style("left", attrScales["plot3"].x(.5) + "px")
+        .style("left", attrScales["plot3"].x(.5) + 70 + "px")
         .property("value", attrScales["plot3"].attr)
         .on('change', function() {
             attrScales["plot3"].attr = d3.select(this).property("value")
@@ -275,6 +277,7 @@ d3.csv("data/spotify_data.csv").then(function(data) {
 
     // Update when select is changed.
     d3.select("#genres").on('change', function() {
+        console.log(genreFilter)
         genreFilter = d3.select(this).property("value")
         // Shrink all points not in filter to 0
         svg.selectAll("circle").transition().duration(1000)

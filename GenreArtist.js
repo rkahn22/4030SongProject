@@ -186,9 +186,6 @@ d3.json("data/top_artists.json").then(function(dataset){
       return z.target.name
     })
 
-
-
-
     const node = svg.append("g")
       .attr("stroke", "white")
       .attr("stroke-width", 1.5)
@@ -231,6 +228,8 @@ d3.json("data/top_artists.json").then(function(dataset){
                     return 0
                 })
                 .text(function(d) { return d.name });
+
+    var clickedNode
 
     node
         .on('mouseover', function(d){
@@ -322,16 +321,35 @@ d3.json("data/top_artists.json").then(function(dataset){
       
         })
         .on('click', function(){
-          d3.select(this)
-              .attr("fill", '#1DB954');
+          node.attr("clicked", false)
+          clickedNode = d3.select(this)
+          clickedNode.classed("clicked", true)
+          clickedNode.attr("fill", '#1DB954');
+          // If genre node, apply filter.
+          if (clickedNode.data()[0]['type'] == "Genre") {
+            genreFilter = clickedNode.data()[0]['name'].toLowerCase()
+            
+            d3.select("#scattersub")
+            .selectAll("circle").transition().duration(1000)
+              .attr("r", d => {
+                  if(genreFilter == 'all')
+                      return 4
+                  else if(d['General_Genre'].includes(genreFilter))
+                      return 4
+                  else return 0
+              })
+          }
         })
         .on('mouseout', function(){
-          node.attr("fill", "white")
-              .attr("opacity", 1);
-          link.attr("stroke-opacity", 0);
-          text.attr("opacity", function(d){
-            if (d.type == 'Artist') return 0
-          });
+            node.attr("fill", "white")
+                .attr("opacity", 1);
+            link.attr("stroke-opacity", 0);
+            text.attr("opacity", function(d){
+              if (d.type == 'Artist') return 0
+            });
+            /*if (d3.select(this).classed("clicked") == true) {
+              d3.select(this).attr("fill", '#1DB954')
+            }*/
         }); 
 
     
