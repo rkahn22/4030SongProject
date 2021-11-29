@@ -1,3 +1,5 @@
+var clickedBar
+
 d3.csv("data/datawithdatesandgenrecorrect.csv").then(function(dataset){
 
   //console.log(dataset)
@@ -325,6 +327,7 @@ var bars = svg.selectAll("rect")
     .attr("fill", function(d, i){
         return color[i%12]
     })
+    .attr("genre", (d, i) => genresChart[i])
     .on('mouseenter', function(actual,i){
         d3.select(this).attr('opacity', 0.5)
         //.attr('width', xScale.bandwidth()+7)
@@ -332,9 +335,42 @@ var bars = svg.selectAll("rect")
         .attr('stroke-width', '3')
     })
     .on('mouseleave', function(actual,i){
-        d3.select(this).attr('opacity', 1)
-        //.attr('width', xScale.bandwidth())
-        .attr('stroke-width', '0')
+        if (d3.select(this).attr('genre') != genreFilter) {
+            d3.select(this).attr('opacity', 1)
+            //.attr('width', xScale.bandwidth())
+            .attr('stroke-width', '0')
+        }
+    })
+    .on('click', function() {
+        // reset all rects before highlighting clicked
+        svg.selectAll('rect')
+            .attr('opacity', 1)
+            .attr('stroke-width', 0)
+        
+        clickedBar = d3.select(this)
+        genreFilter = clickedBar.attr("genre")
+        var selection = "circle[name=" + "'" + genreFilter + "']"
+
+        clickedBar.attr('opacity', .5)
+            .attr('stroke', 'white')
+            .attr('stroke-width', '3')
+        
+        // edit scatter plots
+        d3.select("#scattersub")
+            .selectAll("circle").transition().duration(1000)
+              .attr("r", d => {
+                  if(genreFilter == 'all')
+                      return 4
+                  else if(d['General_Genre'].includes(genreFilter))
+                      return 4
+                  else return 0
+              })
+        // and its filter
+        d3.select("#genres").property("value", genreFilter)
+        // Then genre node
+        d3.select("#topArtists").selectAll("circle").attr("fill", "white")
+        clickedNode = d3.select("#topArtists").select(selection)
+        clickedNode.attr("fill", "#1DB954")
     })
     
 var editText = svg.selectAll("rect")    

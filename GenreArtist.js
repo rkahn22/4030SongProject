@@ -1,3 +1,5 @@
+var clickedNode
+
 d3.json("data/top_artists.json").then(function(dataset){
     console.log(dataset)
 
@@ -206,6 +208,7 @@ d3.json("data/top_artists.json").then(function(dataset){
         else
           return 'white'
       })
+      .attr("name", d => d.name.toLowerCase())
       
        
     node.append("title")
@@ -228,8 +231,6 @@ d3.json("data/top_artists.json").then(function(dataset){
                     return 0
                 })
                 .text(function(d) { return d.name });
-
-    var clickedNode
 
     node
         .on('mouseover', function(d){
@@ -321,14 +322,23 @@ d3.json("data/top_artists.json").then(function(dataset){
       
         })
         .on('click', function(){
-          node.attr("clicked", false)
-          clickedNode = d3.select(this)
-          clickedNode.classed("clicked", true)
-          clickedNode.attr("fill", '#1DB954');
           // If genre node, apply filter.
-          if (clickedNode.data()[0]['type'] == "Genre") {
+          if (d3.select(this).data()[0]['type'] == "Genre") {
+            clickedNode = d3.select(this)
             genreFilter = clickedNode.data()[0]['name'].toLowerCase()
+            var selection = "rect[genre=" + "'" + genreFilter + "']"
             
+            clickedBar = d3.select("#barchart").select(selection)
+            // First deal with bar chart by resetting and editing clicked bar.
+            d3.select("#barchart")
+              .selectAll("rect")
+              .attr('opacity', 1)
+              .attr('stroke-width', 0)
+
+            clickedBar.attr('opacity', 0.5)
+              .attr('stroke', 'white')
+              .attr('stroke-width', '3')
+            // Then filter scatter plot
             d3.select("#scattersub")
             .selectAll("circle").transition().duration(1000)
               .attr("r", d => {
@@ -338,6 +348,8 @@ d3.json("data/top_artists.json").then(function(dataset){
                       return 4
                   else return 0
               })
+            // And its filter
+            d3.select("#genres").property("value", genreFilter)
           }
         })
         .on('mouseout', function(){
@@ -347,9 +359,7 @@ d3.json("data/top_artists.json").then(function(dataset){
             text.attr("opacity", function(d){
               if (d.type == 'Artist') return 0
             });
-            /*if (d3.select(this).classed("clicked") == true) {
-              d3.select(this).attr("fill", '#1DB954')
-            }*/
+           if (clickedNode != null) clickedNode.attr("fill", "#1DB954")
         }); 
 
     

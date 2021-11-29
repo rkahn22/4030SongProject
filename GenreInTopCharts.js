@@ -56,7 +56,6 @@ d3.csv("spotify_data.csv").then(function(dataset){
 
     var yAxisgen = d3.axisLeft().scale(yScale)
 
-
     var bars = svg.selectAll("rect")
                     .data(genreName)
                     .enter()

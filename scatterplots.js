@@ -266,7 +266,7 @@ d3.csv("data/spotify_data.csv").then(function(data) {
         })
 
     genres = ["All", "Country", "Folk", "Funk", "Hip Hop", "Indie", 
-                "Jazz", "Latin", "Pop", "Punk", "R&B", "Rock", "Soul"]
+                "Jazz", "Latin", "Pop", "Punk", "R&B", "Rock", "Soul", "Trap", "Rap"]
     // Create genre options in dropdown select
     d3.select("#genres").selectAll("option")
         .data(genres)
@@ -288,5 +288,28 @@ d3.csv("data/spotify_data.csv").then(function(data) {
                     return 4
                 else return 0
             })
+        
+        // First deal with bar chart by resetting and editing clicked bar.
+        var barSelection = "rect[genre=" + "'" + genreFilter + "']"
+        clickedBar = d3.select("#barchart").select(barSelection)
+            
+        d3.select("#barchart")
+            .selectAll("rect")
+            .attr('opacity', 1)
+            .attr('stroke-width', 0)
+
+        clickedBar.attr('opacity', 0.5)
+            .attr('stroke', 'white')
+            .attr('stroke-width', '3')
+
+        clickedBar.attr('opacity', 0.5)
+            .attr('stroke', 'white')
+            .attr('stroke-width', '3')
+         // Then genre node
+         d3.select("#topArtists").selectAll("circle").attr("fill", "white")
+         var nodeSelection = "circle[name=" + "'" + genreFilter + "']"
+
+         clickedNode = d3.select("#topArtists").select(nodeSelection)
+         clickedNode.attr("fill", "#1DB954")
     })
 })
