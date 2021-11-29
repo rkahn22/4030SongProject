@@ -214,7 +214,7 @@ d3.csv("data/spotify_data.csv").then(function(data) {
     d3.selectAll(".attrSelect")
         .on('mouseover', function() {
             description
-                .style("left", d3.select(this).style("left"))
+                .style("left", parseInt(d3.select(this).style("left")) + 100 + "px")
                 .style("top", parseInt(d3.select(this).style("top")) + 20 + "px")
                 .text(attrDescriptions[d3.select(this).property("value")])
                 .style("visibility", "visible")
@@ -277,7 +277,6 @@ d3.csv("data/spotify_data.csv").then(function(data) {
 
     // Update when select is changed.
     d3.select("#genres").on('change', function() {
-        console.log(genreFilter)
         genreFilter = d3.select(this).property("value")
         // Shrink all points not in filter to 0
         svg.selectAll("circle").transition().duration(1000)
