@@ -355,7 +355,7 @@ var xAxis = svg.append("g")
       .attr("transform", "rotate(-65)")
       .attr("dx", "-1.85em")
       .attr("dy", "0em")
-      .style("stroke", "white")
+      .style("stroke", "grey")
       .style("font-size", 15)
 
 svg.append('text')
