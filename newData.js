@@ -7,7 +7,7 @@ d3.csv("data/datawithdatesandgenrecorrect.csv").then(function(dataset){
       height: 600,
       margin: {
           top: 10,
-          bottom: 50,
+          bottom: 100,
           right: 10,
           left: 50
       }
@@ -214,6 +214,7 @@ d3.csv("data/datawithdatesandgenrecorrect.csv").then(function(dataset){
         totalTimesCharted = totalTimesCharted + latinTimesCharted[i]
     }
 
+
     var latinPosAvg = totalHighestPos/latin.length
     var latinTimesCharted = totalTimesCharted/latin.length
 
@@ -296,7 +297,7 @@ var xScale = d3.scaleBand()
     .padding(0.2)
 
 var yScale = d3.scaleLinear()
-    .domain([0, d3.max(highestPositionData)])
+    .domain([0, d3.max(timesChartedData)])
     .range([dimensions.height - dimensions.margin.bottom, dimensions.margin.top])
 
 var xAxisgen = d3.axisBottom()
@@ -306,17 +307,46 @@ var yAxisgen = d3.axisLeft().scale(yScale)
 
 var g = svg.append("g")
             .attr("transform", "translate(" + 100 + "," + 100 + ")");
+//spearmint, fuchsia, citric, white, black, other colors
+var color = ["#e75e2b", "#bc2be7", "#56e72b", "#4b917d", "#914b5f", "#82914b", "#3748f0", "#f037a5", "#cdf564", "#5a4b91", "#f56484", "#8c64f5"]
+
+var nameSelected = timesChartedData
+var yAxisLabel = '# of times appeared in top charts'
+
 
 var bars = svg.selectAll("rect")
-    .data(highestPositionData)
+    .data(timesChartedData)
     .enter()
     .append("rect")
     .attr("x", (d,i) => xScale(genresChart[i]))
-    .attr("y", (d,i) => yScale(highestPositionData[i]))
+    .attr("y", (d,i) => yScale(timesChartedData[i]))
     .attr("width", xScale.bandwidth())
     .attr("height", d => dimensions.height - dimensions.margin.bottom - yScale(d))
-    .attr("fill", "white")
+    .attr("fill", function(d, i){
+        return color[i%12]
+    })
+    .on('mouseenter', function(actual,i){
+        d3.select(this).attr('opacity', 0.5)
+        //.attr('width', xScale.bandwidth()+7)
+        .attr('stroke', 'black')
+        .attr('stroke-width', '3')
+    })
+    .on('mouseleave', function(actual,i){
+        d3.select(this).attr('opacity', 1)
+        //.attr('width', xScale.bandwidth())
+        .attr('stroke-width', '0')
+    })
+    
+var editText = svg.selectAll("rect")    
+    .append("title")
+    .text(function(d,i){
+        return "Avg # of times charted is " +nameSelected[i];
+    })
 
+
+    //.attr("fill", "white")
+    
+        
 
 var xAxis = svg.append("g")
       .call(xAxisgen)
@@ -328,11 +358,45 @@ var xAxis = svg.append("g")
       .style("stroke", "white")
       .style("font-size", 15)
 
+svg.append('text')
+      .attr('x', dimensions.width / 2 + dimensions.margin.bottom -140)
+      .attr('y', dimensions.height-30)
+      .attr('text-anchor', 'center')
+      .text('General Genres')
+
 var yAxis = svg.append("g")
       .call(yAxisgen)
       .style("transform", `translateX(${dimensions.margin.left}px)`)
       .style("stroke", "white")
       .style("font-size", 15)
+
+svg.append('text')
+      .attr('x', -dimensions.margin.left-100)
+      .attr('y', -dimensions.margin.top+20)
+      .attr('text-anchor', 'end')
+      .attr('transform', 'rotate(-90)')
+      .text(yAxisLabel)      
+      
+
+
+
+
+// var LabelXAxis = svg.append('text')
+//       .call(yAxisgen)
+//       .attr('x', -(dimensions.height / 2) - dimensions.margin)
+//       .attr('y', dimensions.margin / 2.4)
+//       .attr('transform', 'rotate(-90)')
+//       .attr('text-anchor', 'middle')
+//       .text('Love meter (%)')
+
+// svg.append('text')
+//     .call(xAxisgen)
+//       .attr('x', dimensions.width / 2 + dimensions.margin)
+//       .attr('y', 40)
+//       .attr('text-anchor', 'middle')
+//       .text('Most loved programming languages in 2018')
+
+
 
 //greatest to least
 // const newDescendingOrder = highestPositionData.sort(function(a,b){return b-a})
@@ -348,6 +412,8 @@ var yAxis = svg.append("g")
 
     //times charted data
 d3.select("#timescharted").on('click', function(){
+    yAxisLabel = '# of times appeared in top charts'
+    nameSelected = timesChartedData
     yScale
         .domain([0, d3.max(timesChartedData)])
     yAxisgen.scale(yScale)
@@ -357,21 +423,65 @@ d3.select("#timescharted").on('click', function(){
     bars.transition().duration(5000)
         .attr("y", (d,i) => yScale(timesChartedData[i]))
         .attr("height", (d,i) => dimensions.height - dimensions.margin.bottom - yScale(timesChartedData[i]))
+        
 
+    editText
+        .text(function(d,i){
+            return "Avg # of times charted is " +nameSelected[i];
+        })
     })
 
-    //back to highest position
-    d3.select("#highestpos").on('click', function(){
+    //back to highest position - want average to be small (1 means #1 in chart)
+d3.select("#highestpos").on('click', function(){
+        yAxisLabel = 'Avg highest position of songs in top charts'
+        nameSelected = highestPositionData
         yScale
-            .domain([0, d3.max(highestPositionData)])
+            .domain([d3.max(highestPositionData)+10, 0])
         yAxisgen.scale(yScale)
         yAxis.transition().duration(5000)
             .call(yAxisgen)
+            //svg.text('Avg highest position of songs in top charts')
+
+        // xAxisgen.orient("height")
+        // xAxis.transition().duration(5000)
+        //     .call(xAxisgen)
     
     bars.transition().duration(5000)
         .attr("y", (d,i) => yScale(highestPositionData[i]))
-        .attr("height", d => dimensions.height - dimensions.margin.bottom - yScale(d))
+        .attr("height", (d, i) => dimensions.height - dimensions.margin.bottom - yScale(highestPositionData[i]))
+        // .append("title")
+        // .text(function(d){
+        //     return "This average highest position is " +d;
+        // })
+
+    editText
+        .text(function(d,i){
+            return "Avg highest pos is " +nameSelected[i];
+        })
+    
+
+
+    
     })
+
+    var allGroup = ['Select One','Ascending', 'Descending']
+
+    d3.select("#selectButtonTC")
+        .selectAll('myOptions')
+        .data(allGroup)
+        .enter()
+        .append('option')
+        .text(function(d) {return d;})
+        .attr("value", function(d) {return d;})
+
+    d3.select("#selectButtonHP")
+        .selectAll('myOptions')
+        .data(allGroup)
+        .enter()
+        .append('option')
+        .text(function(d) {return d;})
+        .attr("value", function(d) {return d;})
+
 
 
 
