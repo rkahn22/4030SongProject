@@ -6,8 +6,10 @@ d3.csv("data/spotify_data.csv").then(function(data) {
     var nCols = 3 
 
     var dimensions = {
-        width: 900,
-        height: 660,
+        //width: 900,
+        //height: 660,
+        width: 1100,
+        height: 500,
         margin: {
             top: 30,
             bottom: 50,
@@ -33,8 +35,8 @@ d3.csv("data/spotify_data.csv").then(function(data) {
     xScales = []
     yScales = []
 
-    var yAccessor = d => parseFloat(d.Streams.replace(/,/g, ''))
-    // Create x scales by adding the subplot dimensions
+    //var yAccessor = d => parseFloat(d.Streams.replace(/,/g, ''))
+    /*// Create x scales by adding the subplot dimensions
     for(i = 0; i < nCols; i++) {
         xScales.push(d3.scaleLinear()
                 .domain([0, 1])
@@ -45,6 +47,20 @@ d3.csv("data/spotify_data.csv").then(function(data) {
     for(i = 0; i < nRows; i++) {
         yScales.push(d3.scaleLog()
                 .domain(d3.extent(data, yAccessor))
+                .range([dimensions.height - dimensions.margin.bottom, dimensions.margin.top]))
+    }*/
+    // Updated version
+    var xAccessor = d => parseFloat(d.Streams.replace(/,/g, ''))
+    for(i = 0; i < nCols; i++) {
+        xScales.push(d3.scaleLog()
+                .domain(d3.extent(data, xAccessor))
+                .range([dimensions.margin.left + (dimensions.subMargin*(i)) + (subplotDim.width*i), 
+                    (dimensions.subMargin*i) + (subplotDim.width*(i+1))]))
+    }
+    // Create y scales by adding the subplot dimensions
+    for(i = 0; i < nRows; i++) {
+        yScales.push(d3.scaleLinear()
+                .domain([0, 1])
                 .range([dimensions.height - dimensions.margin.bottom, dimensions.margin.top]))
     }
     // Default to Danceability, Acousticness, Energy
@@ -68,7 +84,7 @@ d3.csv("data/spotify_data.csv").then(function(data) {
     // Plot x scales
     xScales.forEach(element => {
         svg.append("g")
-            .call(d3.axisBottom().scale(element))
+            .call(d3.axisBottom().scale(element).tickFormat(d => d / 1000000))
             .style("transform", `translateY(${dimensions.height-dimensions.margin.bottom}px)`)
             .style("stroke", "white")
         .select(".domain")
@@ -87,12 +103,22 @@ d3.csv("data/spotify_data.csv").then(function(data) {
     var color = d3.scaleOrdinal(d3.schemeCategory10)
                     .domain(attributes)
 
-    // Set y-axis label. x and y are flipped by the rotation for whatever reason
+    /*// Set y-axis label. x and y are flipped by the rotation for whatever reason
     svg.append("text")
         .attr("x", -1 * (dimensions.height / 2))
         .attr("y", 20)
         .attr("transform", "rotate(-90)")
         .text("Streams (Millions)")
+        .style("fill", "white")
+        .style("font-family", "Verdana")
+        .style("text-anchor", "middle")
+        .style("font-weight", "bold")
+        */
+    
+    svg.append("text")
+        .attr("x", dimensions.width / 2)
+        .attr("y", dimensions.height - 10)
+        .text("Log Scale of Streams (Millions)")
         .style("fill", "white")
         .style("font-family", "Verdana")
         .style("text-anchor", "middle")
@@ -117,8 +143,10 @@ d3.csv("data/spotify_data.csv").then(function(data) {
             .data(data)
             .enter()
             .append("circle")
-            .attr("cx", d => attrScales[element].x(+d[attrScales[element].attr]))
-            .attr("cy", d => attrScales[element].y(yAccessor(d)))
+            //.attr("cx", d => attrScales[element].x(+d[attrScales[element].attr]))
+            //.attr("cy", d => attrScales[element].y(yAccessor(d)))
+            .attr("cx", d => attrScales[element].x(xAccessor(d)))
+            .attr("cy", d => attrScales[element].y(+d[attrScales[element].attr]))
             .attr("fill", color(attrScales[element].attr))
             .attr("id", d => d['Song ID'])
             .attr("plot", element)
@@ -230,18 +258,18 @@ d3.csv("data/spotify_data.csv").then(function(data) {
         .attr("value", d => d)
     // First plot select tool
     d3.select("#attrSelect1")
-        .style("left", attrScales["plot1"].x(.5) + 70 + "px")
+        .style("left", attrScales["plot1"].x(15000000) - 20 + "px")
         .property("value", attrScales["plot1"].attr)
         .on('change', function() {
             attrScales["plot1"].attr = d3.select(this).property("value")
             svg.selectAll("circle[plot='plot1']")
                 .transition().duration(1000)
-                .attr("cx", d => attrScales["plot1"].x(+d[attrScales["plot1"].attr]))
+                .attr("cy", d => attrScales["plot1"].y(+d[attrScales["plot1"].attr]))
                 .attr("fill", color(attrScales["plot1"]["attr"]))
         })
     // Second plot select tool
     d3.select("#attrSelect2")
-        .style("left", attrScales["plot2"].x(.5) + 70 + "px")
+        .style("left", attrScales["plot2"].x(15000000) - 20 + "px")
         .property("value", attrScales["plot2"].attr)
         .on('change', function() {
             attrScales["plot2"].attr = d3.select(this).property("value")
@@ -250,18 +278,18 @@ d3.csv("data/spotify_data.csv").then(function(data) {
                     return d3.select(this).attr("plot") == "plot2"
                 })
                 .transition().duration(1000)
-                .attr("cx", d => attrScales["plot2"].x(+d[attrScales["plot2"].attr]))
+                .attr("cy", d => attrScales["plot2"].y(+d[attrScales["plot2"].attr]))
                 .attr("fill", color(attrScales["plot2"]["attr"]))
         })
     // Third plot select tool
     d3.select("#attrSelect3")
-        .style("left", attrScales["plot3"].x(.5) + 70 + "px")
+        .style("left", attrScales["plot3"].x(15000000) - 20 + "px")
         .property("value", attrScales["plot3"].attr)
         .on('change', function() {
             attrScales["plot3"].attr = d3.select(this).property("value")
                 svg.selectAll("circle[plot='plot3']")
                 .transition().duration(1000)
-                .attr("cx", d => attrScales["plot3"].x(+d[attrScales["plot3"].attr]))
+                .attr("cy", d => attrScales["plot3"].y(+d[attrScales["plot3"].attr]))
                 .attr("fill", color(attrScales["plot3"]["attr"]))
         })
 

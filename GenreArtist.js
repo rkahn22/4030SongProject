@@ -237,7 +237,6 @@ d3.json("data/top_artists.json").then(function(dataset){
           d3.select(this) // work on this specific node
               .attr("fill", '#1DB954');
           
-          
           // if you select a Genre node
           if (d3.select(this)._groups[0][0].__data__.type == "Genre"){
             genre = d3.select(this)._groups[0][0].__data__.name;
