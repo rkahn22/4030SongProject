@@ -313,7 +313,7 @@ var g = svg.append("g")
 var color = ["#e75e2b", "#bc2be7", "#56e72b", "#4b917d", "#914b5f", "#82914b", "#3748f0", "#f037a5", "#cdf564", "#5a4b91", "#f56484", "#8c64f5"]
 
 var nameSelected = timesChartedData
-var yAxisLabel = '# of times appeared in top charts'
+var yAxisLabel = 'Average # of times in top charts'
 
 
 var bars = svg.selectAll("rect")
@@ -446,7 +446,7 @@ var yAxisTitle = svg.append('text')
 
     //times charted data
 d3.select("#timescharted").on('click', function(){
-    yAxisLabel = '# of times appeared in top charts'
+    yAxisLabel = 'Average # of times in top charts'
     nameSelected = timesChartedData
     yScale
         .domain([0, d3.max(timesChartedData)])
@@ -468,7 +468,7 @@ d3.select("#timescharted").on('click', function(){
     //back to highest position - want average to be small (1 means #1 in chart)
 d3.select("#highestpos").on('click', function(){
 
-        yAxisLabel = 'Avg highest position of songs in top charts'
+        yAxisLabel = 'Avg highest position in top charts'
         console.log()
         nameSelected = highestPositionData
         yScale
