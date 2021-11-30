@@ -33,20 +33,6 @@ d3.csv("data/spotify_data.csv").then(function(data) {
     xScales = []
     yScales = []
 
-    //var yAccessor = d => parseFloat(d.Streams.replace(/,/g, ''))
-    /*// Create x scales by adding the subplot dimensions
-    for(i = 0; i < nCols; i++) {
-        xScales.push(d3.scaleLinear()
-                .domain([0, 1])
-                .range([dimensions.margin.left + (dimensions.subMargin*(i)) + (subplotDim.width*i), 
-                    (dimensions.subMargin*i) + (subplotDim.width*(i+1))]))
-    }
-    // Create y scales by adding the subplot dimensions
-    for(i = 0; i < nRows; i++) {
-        yScales.push(d3.scaleLog()
-                .domain(d3.extent(data, yAccessor))
-                .range([dimensions.height - dimensions.margin.bottom, dimensions.margin.top]))
-    }*/
     // Updated version
     var xAccessor = d => parseFloat(d.Streams.replace(/,/g, ''))
     for(i = 0; i < nCols; i++) {
@@ -101,18 +87,6 @@ d3.csv("data/spotify_data.csv").then(function(data) {
     var color = d3.scaleOrdinal(d3.schemeCategory10)
                     .domain(attributes)
 
-    /*// Set y-axis label. x and y are flipped by the rotation for whatever reason
-    svg.append("text")
-        .attr("x", -1 * (dimensions.height / 2))
-        .attr("y", 20)
-        .attr("transform", "rotate(-90)")
-        .text("Streams (Millions)")
-        .style("fill", "white")
-        .style("font-family", "Verdana")
-        .style("text-anchor", "middle")
-        .style("font-weight", "bold")
-        */
-    
     svg.append("text")
         .attr("x", dimensions.width / 2)
         .attr("y", dimensions.height - 10)
@@ -131,7 +105,7 @@ d3.csv("data/spotify_data.csv").then(function(data) {
                     .classed("tooltip", true)
 
     var clickedData = null
-    
+    var clickedPoints = null
 
     var plots = ["plot1", "plot2", "plot3"]
 
@@ -202,7 +176,8 @@ d3.csv("data/spotify_data.csv").then(function(data) {
                 var id = d3.select(this).attr("id")
                 id = "[id='" + id + "']"
                 
-                var clickedPoints = d3.selectAll(id).transition().duration(500)
+                clickedPoints = d3.selectAll(id)
+                clickedPoints.transition().duration(500)
                     .attr("fill", "white")
                     .attr("r", 6)
                     .style("opacity", 1.0)
@@ -210,11 +185,11 @@ d3.csv("data/spotify_data.csv").then(function(data) {
                 clickedData = d3.select(this).data()[0]
                 // Reset text of song info
                 songInfo.style("visibility", "visible")
-                    .text(hoverData["Song Name"] + " by " + hoverData["Artist"] + "\n" +
-                        attrScales['plot1'].attr + ": " + hoverData[attrScales['plot1'].attr] + "\n" +
-                        attrScales['plot2'].attr + ": " + hoverData[attrScales['plot2'].attr] + "\n" +
-                        attrScales['plot3'].attr + ": " + hoverData[attrScales['plot3'].attr] + "\n" +
-                        "Highest Charting Position: " + hoverData['Highest Charting Position'] + "\n"
+                    .text(clickedData["Song Name"] + " by " + clickedData["Artist"] + "\n" +
+                        attrScales['plot1'].attr + ": " + clickedData[attrScales['plot1'].attr] + "\n" +
+                        attrScales['plot2'].attr + ": " + clickedData[attrScales['plot2'].attr] + "\n" +
+                        attrScales['plot3'].attr + ": " + clickedData[attrScales['plot3'].attr] + "\n" +
+                        "Highest Charting Position: " + clickedData['Highest Charting Position'] + "\n"
                     ) 
             })
     })
@@ -264,6 +239,10 @@ d3.csv("data/spotify_data.csv").then(function(data) {
                 .transition().duration(1000)
                 .attr("cy", d => attrScales["plot1"].y(+d[attrScales["plot1"].attr]))
                 .attr("fill", color(attrScales["plot1"]["attr"]))
+            // Reset clicked points
+            clickedPoints.attr("fill", "white")
+                .attr("r", 6)
+                .style("opacity", 1.0)
         })
     // Second plot select tool
     d3.select("#attrSelect2")
@@ -333,8 +312,8 @@ d3.csv("data/spotify_data.csv").then(function(data) {
          // Then genre node
          d3.select("#topArtists").selectAll("circle").attr("fill", "white")
          var nodeSelection = "circle[name=" + "'" + genreFilter + "']"
-
          clickedNode = d3.select("#topArtists").select(nodeSelection)
          clickedNode.attr("fill", "#1DB954")
+         colorLinks(clickedNode)
     })
 })

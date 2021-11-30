@@ -327,16 +327,23 @@ var bars = svg.selectAll("rect")
     .attr("fill", function(d, i){
         return color[i%12]
     })
+    .attr("genre", (d, i) => genresChart[i])
     .on('mouseenter', function(actual,i){
         d3.select(this).attr('opacity', 0.5)
         //.attr('width', xScale.bandwidth()+7)
-        .attr('stroke', 'grey')
+        .attr('stroke', 'white')
         .attr('stroke-width', '3')
     })
     .on('mouseleave', function(actual,i){
         d3.select(this).attr('opacity', 1)
         //.attr('width', xScale.bandwidth())
         .attr('stroke-width', '0')
+        
+        if (clickedBar != null) {
+            clickedBar.attr('opacity', .5)
+                .attr('stroke', 'white')
+                .attr('stroke-width', '3')
+        }
     })
     .on('click', function() {
         // reset all rects before highlighting clicked
@@ -364,10 +371,12 @@ var bars = svg.selectAll("rect")
               })
         // and its filter
         d3.select("#genres").property("value", genreFilter)
-        // Then genre node
+        // Then genre node and links
         d3.select("#topArtists").selectAll("circle").attr("fill", "white")
         clickedNode = d3.select("#topArtists").select(selection)
         clickedNode.attr("fill", "#1DB954")
+        link.attr("stroke-opacity", 0);
+        colorLinks(clickedNode)
     })
     
 var editText = svg.selectAll("rect")    

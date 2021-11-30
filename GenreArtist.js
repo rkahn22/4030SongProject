@@ -1,4 +1,9 @@
+// Globals needed to allow other scripts to edit
 var clickedNode
+var link
+var links
+var node
+var text
 
 d3.json("data/top_artists.json").then(function(dataset){
     console.log(dataset)
@@ -85,7 +90,7 @@ d3.json("data/top_artists.json").then(function(dataset){
         
     ];
 
-    var links = [
+    links = [
         {source: "Pop", target: "Taylor Swift"},
         {source: "Pop", target: "Justin Bieber"},
         {source: "Pop", target: "BTS"},
@@ -163,7 +168,7 @@ d3.json("data/top_artists.json").then(function(dataset){
       .force("center", d3.forceCenter(width / 2, height / 1.5))
       .on('tick', ticked);
 
-    const link = svg.append("g")
+    link = svg.append("g")
       .attr("stroke", '#1DB954')
         .selectAll("line")
         .data(links)
@@ -180,7 +185,7 @@ d3.json("data/top_artists.json").then(function(dataset){
       return z.target.name
     })
 
-    const node = svg.append("g")
+    node = svg.append("g")
       .attr("stroke", "white")
       .attr("stroke-width", 1.5)
         .selectAll("circle")
@@ -206,7 +211,7 @@ d3.json("data/top_artists.json").then(function(dataset){
     node.append("title")
        .text(d => d.name);
  
-    const text = svg.append("g")
+    text = svg.append("g")
                 .selectAll("text")
                 .data(nodes)
                 .join("text")
@@ -257,8 +262,6 @@ d3.json("data/top_artists.json").then(function(dataset){
               else
                 return 0
             })
-
-            
 
             text.attr("opacity", function(d){
               if (targets.includes(d.name) || d.type=="Genre"){
@@ -313,9 +316,12 @@ d3.json("data/top_artists.json").then(function(dataset){
       
         })
         .on('click', function(){
-          // If genre node, apply filter.
+          // If genre node, set links and apply filter.
           if (d3.select(this).data()[0]['type'] == "Genre") {
             clickedNode = d3.select(this)
+            link.attr('stroke-opacity', 0)
+            colorLinks(clickedNode)
+
             genreFilter = clickedNode.data()[0]['name'].toLowerCase()
             var selection = "rect[genre=" + "'" + genreFilter + "']"
             
@@ -350,7 +356,7 @@ d3.json("data/top_artists.json").then(function(dataset){
             text.attr("opacity", function(d){
               if (d.type == 'Artist') return 0
             });
-           if (clickedNode != null) clickedNode.attr("fill", "#1DB954")
+           if (clickedNode != null) colorLinks(clickedNode)
         }); 
 
     
@@ -373,3 +379,39 @@ d3.json("data/top_artists.json").then(function(dataset){
     }
     
 })
+// Used by other scripts to highlight the links between nodes
+function colorLinks(clickedNode) {
+  if (clickedNode._groups[0][0].__data__.type == "Genre"){
+    genre = clickedNode._groups[0][0].__data__.name;
+  
+    var connected = links.filter(function(e){
+      return e.source.name == genre
+    })
+
+    var targets = connected.map(function(z){
+      return z.target.name
+    })
+
+    node.attr("fill", function(d){
+      if (targets.includes(d.name) || d.name == genre)
+        return '#1DB954'
+      else
+        return 'white'
+    })
+
+    link.attr("stroke-opacity", function(d){
+      if (connected.includes(d))
+        return 1
+      else
+        return 0
+    })
+
+    text.attr("opacity", function(d){
+      if (targets.includes(d.name) || d.type=="Genre"){
+        return 1
+      }
+      else return 0;
+    })
+
+  }
+}
