@@ -401,7 +401,7 @@ var xAxis = svg.append("g")
       .style("font-size", 15)
 
 var xAxisTitle = svg.append('text')
-      .attr('x', dimensions.width / 2 + dimensions.margin.bottom -140)
+      .attr('x', dimensions.width / 2 + dimensions.margin.bottom -100)
       .attr('y', dimensions.height-30)
       .attr('text-anchor', 'center')
       .text('General Genres')
