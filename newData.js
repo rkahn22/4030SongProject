@@ -310,7 +310,8 @@ var yAxisgen = d3.axisLeft().scale(yScale)
 var g = svg.append("g")
             .attr("transform", "translate(" + 100 + "," + 100 + ")");
 //spearmint, fuchsia, citric, white, black, other colors
-var color = ["#e75e2b", "#bc2be7", "#56e72b", "#4b917d", "#914b5f", "#82914b", "#3748f0", "#f037a5", "#cdf564", "#5a4b91", "#f56484", "#8c64f5"]
+//var color = ["#e75e2b", "#bc2be7", "#56e72b", "#4b917d", "#914b5f", "#82914b", "#3748f0", "#f037a5", "#cdf564", "#5a4b91", "#f56484", "#8c64f5"]
+var color = ["#EC6E3D", "#F7CFD3", "#F3E357", "#5D8F7F", "#DAF882", "#91C155", "#E57A9F", "#DC3A9A", "#F5C774", "#A6C2D0", "#EB5540", "#6399EE"]
 
 var nameSelected = timesChartedData
 var yAxisLabel = 'Average # of times in top charts'
