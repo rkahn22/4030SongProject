@@ -1,38 +1,40 @@
 html {
-    background-color:#48937e;
+    background-color: black;
     width: 100vw;
     min-width: 100%;
     height: 100vh;
     min-height: 100%;
     overflow-x: hidden;
-    zoom: 67%
+    zoom: 85%
 }
 
 body {
-    margin: 50px 100px 50px 100px;
+    /* margin: 50px 100px 50px 100px; */
     background-color: black;
     height: 1750px;
     overflow-x: hidden;
-    border-style: solid;
+    /* border-style: solid;
     border-width: 5px;
     border-color: #96D406;
-    border-radius: 50px;
+    border-radius: 50px; */
     text-align: center;
 }
 
 h1 {
-    text-align: center;
+    text-align: left;
     color: white;
-    font-family: Verdana;   
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;  
     font-size: 85px;
     line-height: 0;
     padding-top: 20px;
 }
 
 #subtitle {
-    text-align: center;
+    text-align: left;
     color: white;
-    font-family: Verdana;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
     font-size: 30px;
     font-style: italic;
     line-height: 0;
@@ -47,16 +49,16 @@ h1 {
 
 #popLength {
     position: absolute;
-    top: 1000px;
-    left: 925px;
+    top: 900px;
+    left: 1750px;
     text-anchor: middle;
     transform: scale(0.9);
 }
 
 #artists {
     position: absolute;
-    top: 850px;
-    left: px;
+    top: -15px;
+    left: 1750px;
     text-anchor: middle;
     transform: scale(0.9);
 }
@@ -64,7 +66,7 @@ h1 {
 #scatterplots {
     position: absolute;
     top: 300px;
-    left: 250px;
+    left: 100px;
     width: 1150px;
     text-anchor: middle;
     transform: scale(1.2)
