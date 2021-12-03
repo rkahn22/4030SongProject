@@ -6,7 +6,7 @@ d3.csv("data/datawithdatesandgenrecorrect.csv").then(function(dataset){
 
   var dimensions = {
       width: 600,
-      height: 600,
+      height: 450,
       margin: {
           top: 10,
           bottom: 100,
@@ -397,15 +397,18 @@ var xAxis = svg.append("g")
       .attr("transform", "rotate(-65)")
       .attr("dx", "-1.85em")
       .attr("dy", "0em")
-      .style("stroke", "white")
+      .attr("fill", "white")
+    //   .style("stroke", "white")
       .style("font-size", 15)
 
 var xAxisTitle = svg.append('text')
       .attr('x', dimensions.width / 2 + dimensions.margin.bottom -100)
-      .attr('y', dimensions.height-30)
+      .attr('y', dimensions.height-20)
       .attr('text-anchor', 'center')
       .text('General Genres')
-      .style("stroke", "white")
+      .attr("fill", "white")
+    //   .style("stroke", "white")
+      .attr("font-family", "Helvetica")
 
 var yAxis = svg.append("g")
       .call(yAxisgen)
@@ -414,12 +417,14 @@ var yAxis = svg.append("g")
       .style("font-size", 15)
 
 var yAxisTitle = svg.append('text')
-      .attr('x', -dimensions.margin.left-115)
-      .attr('y', -dimensions.margin.top+20)
+      .attr('x', -dimensions.margin.left-50)
+      .attr('y', -dimensions.margin.top+22)
       .attr('text-anchor', 'end')
       .attr('transform', 'rotate(-90)')
       .text(yAxisLabel)  
-      .style("stroke", "white")    
+      .attr("fill", "white")
+    //   .style("stroke", "white")  
+      .attr("font-family", "Helvetica")  
       
 
 

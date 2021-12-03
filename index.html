@@ -10,24 +10,6 @@
   <body>
     <h1>Tune Tracker</h1>
     <p id="subtitle">What makes a song popular?</p>
-
-    <div id = "popLength">
-      <button id="timescharted">Times Charted</button>
-      <button id="highestpos">Highest Position</button>
-      <svg id="barchart"></svg>
-      <p class="caption">Does genre affect the number of weeks on the charts? <BR>
-        This bar chart displays the average number of times songs in particular genres <BR>
-        were in the Top 200 Charts (Times Charted). <BR>
-        By clicking Highest Position, you can then see the the average highest position <BR>
-        songs in a particular genre charted. </p>
-    </div>
-    <div id = "artists">
-      <svg id="topArtists"></svg>
-     <p class = "caption">Which artists are the top of their genre? <BR>
-       This plot shows the top 5 artists with the most occurences on the charts per genre.<BR>
-       The node size indicates how many times that genre or artist appears on the charts. <BR>
-       Hover over a genre node to view its associated top artists</p>
-    </div>
     <div id = "scatterplots">
       <div id = "songInfo"></div>
       <div id = "attrInfo"></div> 
@@ -38,8 +20,25 @@
       <svg id="scattersub"></svg>
       <p class="caption">How do song attributes and genres affect popularity?</p>
     </div>
-
-
+    <!-- <div class="vl"></div> -->
+    <div id = "popLength">
+      <button id="timescharted">Times Charted</button>
+      <button id="highestpos">Highest Position</button>
+      <svg id="barchart"></svg>
+      <p id="barCaption" class="caption"><B>Does genre affect the number of weeks on the charts?</B> <BR><BR>
+        This bar chart displays the average number of times songs in particular genres 
+        were in the Top 200 Charts (Times Charted). 
+        By clicking Highest Position, you can then see the the average highest position 
+        songs in a particular genre charted. </p>
+    </div>
+    <div id = "artists">
+      <svg id="topArtists"></svg>
+     <p id="artistCaption" class = "caption"><B>Which artists are the top of their genre? </B><BR><BR>
+       This plot shows the top 5 artists with the most occurences on the charts per genre.
+       The node size indicates how many times that genre or artist appears on the charts. 
+       Hover over a genre node to view its associated top artists.</p>
+    </div>
+    
     <script src="TuneTracker.js"></script>
     <script src="scatterplots.js"></script>
     <script src="GenreArtist.js"></script>
