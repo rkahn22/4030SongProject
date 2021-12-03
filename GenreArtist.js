@@ -8,7 +8,7 @@ var text
 d3.json("data/top_artists.json").then(function(dataset){
     console.log(dataset)
 
-    var width = 900
+    var width = 1000
     var height = 800
 
     // get topArtists svg
@@ -217,7 +217,7 @@ d3.json("data/top_artists.json").then(function(dataset){
                 .join("text")
                 .attr("dx", 0)
                 .attr("dy", d => d.type == "Genre" ? -1*(d.value/8)-10 : (d.value/2)+15)
-                .attr("font-size", d=> d.type == 'Genre' ? 16: 12)
+                .attr("font-size", d=> d.type == 'Genre' ? 16: 14)
                 .attr("font-family", "Helvetica")
                 .attr("font-weight", "bold")
                 .attr("fill", "white")

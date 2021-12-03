@@ -42,7 +42,7 @@ h1 {
 
 .caption {
     color: white;
-    font-family: Verdana;
+    font-family: 'Montserrat', sans-serif;
     font-size: 15px;
     font-style: italic;
 }
@@ -50,32 +50,32 @@ h1 {
 #popLength {
     position: absolute;
     top: 900px;
-    left: 1750px;
+    left: 1900px;
     text-anchor: middle;
-    transform: scale(0.9);
+    transform: scale(1.1);
 }
 
 #artists {
     position: absolute;
-    top: -15px;
-    left: 1750px;
+    top: -20px;
+    left: 1850px;
     text-anchor: middle;
-    transform: scale(0.9);
+    transform: scale(1.1);
 }
 
 #scatterplots {
     position: absolute;
-    top: 300px;
+    top: 425px;
     left: 100px;
-    width: 1150px;
+    width: 1100px;
     text-anchor: middle;
     transform: scale(1.2)
 }
 
 #songInfo {
     position: absolute;
-    top: 50px;
-    left: 1200px;
+    top: -135px;
+    left: 575px;
     margin: 0;
 }
 
@@ -84,7 +84,7 @@ h1 {
     text-align: center;
     background: #48937e;
     color: white;
-    font-family: Verdana;
+    font-family: 'Montserrat';
     font-size: 12px;
     width: 250px;
     border-style: solid;
@@ -95,11 +95,11 @@ h1 {
 #genres {
     position: absolute;
     top: 0px;
-    left: 1200px;
+    left: 1325px;
     background: black;
     color: white;
-    font-family: Verdana;
-    font-size: 12px;
+    font-family: 'Montserrat';
+    font-size: 15px;
     border-style: solid;
     border-width: 1px;
     border-color: white;
@@ -110,9 +110,47 @@ h1 {
     background: black;
     text-anchor: middle;
     color: white;
-    font-family: Verdana;
-    font-size: 12px;
+    font-family: 'Montserrat';
+    font-size: 15px;
     border-style: solid;
     border-width: 1px;
     border-color: white;
 }
+
+#highestpos{
+    position: absolute;
+    top: 450px;
+    left: 300px;
+}
+
+#timescharted{
+    position: absolute;
+    top: 450px;
+    left: 180px;
+}
+
+#artistCaption {
+    position: absolute;
+    top: 375px;
+    left: 725px;
+    width: 250px;
+    text-align: right;
+    text-anchor: middle;
+}
+
+#barCaption {
+    position: absolute;
+    top: 100px;
+    left: 675px;
+    width: 250px;
+    text-align: right;
+    text-anchor: middle;
+}
+
+.vl {
+    border-left: 6px solid white;
+    height: 2000px;
+    position: absolute;
+    left: 1750px;
+    top: 0;
+  }
