@@ -238,8 +238,6 @@ d3.json("data/top_artists.json").then(function(dataset){
           if (d3.select(this)._groups[0][0].__data__.type == "Genre"){
             genre = d3.select(this)._groups[0][0].__data__.name;
             
-            
-            
             var connected = links.filter(function(e){
               return e.source.name == genre
             })
@@ -336,16 +334,8 @@ d3.json("data/top_artists.json").then(function(dataset){
               .attr('stroke', 'white')
               .attr('stroke-width', '3')
             // Then filter scatter plot
-            d3.select("#scattersub")
-            .selectAll("circle").transition().duration(1000)
-              .attr("r", d => {
-                  if(genreFilter == 'all')
-                      return 4
-                  else if(d['General_Genre'].includes(genreFilter))
-                      return 4
-                  else return 0
-              })
-            // And its filter
+            filterGenre()
+            // And its filter dropdown
             d3.select("#genres").property("value", genreFilter)
           }
         })

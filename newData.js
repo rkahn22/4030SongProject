@@ -359,18 +359,9 @@ var bars = svg.selectAll("rect")
         clickedBar.attr('opacity', .5)
             .attr('stroke', 'white')
             .attr('stroke-width', '3')
-        
         // edit scatter plots
-        d3.select("#scattersub")
-            .selectAll("circle").transition().duration(1000)
-              .attr("r", d => {
-                  if(genreFilter == 'all')
-                      return 4
-                  else if(d['General_Genre'].includes(genreFilter))
-                      return 4
-                  else return 0
-              })
-        // and its filter
+        filterGenre()
+        // and its filter dropdown
         d3.select("#genres").property("value", genreFilter)
         // Then genre node and links
         d3.select("#topArtists").selectAll("circle").attr("fill", "white")
