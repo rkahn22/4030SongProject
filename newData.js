@@ -288,7 +288,8 @@ d3.csv("data/datawithdatesandgenrecorrect.csv").then(function(dataset){
 
 
 
-    const genresChart = ["country", "folk", "funk", "hip hop", "indie", "jazz", "latin", "pop", "punk", "r&b", "rock", "soul"]
+    //const genresChart = ["country", "folk", "funk", "hip hop", "indie", "jazz", "latin", "pop", "punk", "r&b", "rock", "soul"]
+    var genresChart = ["funk", "country", "rock", "hip hop", "jazz", "r&b", "folk", "pop", "latin", "punk", "soul", "indie"]
     const highestPositionData = [countryPosAvg, folkPosAvg, funkPosAvg, hiphopPosAvg, indiePosAvg, jazzPosAvg, latinPosAvg, popPosAvg, punkPosAvg, rbPosAvg, rockPosAvg, soulPosAvg]
     const timesChartedData = [countryTimesCharted, folkTimesCharted, funkTimesCharted, hiphopTimesCharted, indieTimesCharted, jazzTimesCharted, latinTimesCharted, popTimesCharted, punkTimesCharted, rbTimesCharted, rockTimesCharted, soulTimesCharted]
 
