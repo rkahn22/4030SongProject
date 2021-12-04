@@ -232,7 +232,7 @@ d3.json("data/top_artists.json").then(function(dataset){
     node
         .on('mouseover', function(d){
           d3.select(this) // work on this specific node
-              .attr("fill", '#1DB954');
+              .attr("fill", '#1DB954')
           
           // if you select a Genre node
           if (d3.select(this)._groups[0][0].__data__.type == "Genre"){
@@ -249,7 +249,8 @@ d3.json("data/top_artists.json").then(function(dataset){
 
             node.attr("fill", function(d){
               if (targets.includes(d.name) || d.name == genre)
-                return '#1DB954'
+                if (genre.toLowerCase() == genreFilter) return colorGenre(genreFilter)
+                else return '#1DB954'
               else
                 return 'white'
             })
@@ -260,6 +261,10 @@ d3.json("data/top_artists.json").then(function(dataset){
               else
                 return 0
             })
+              .attr("stroke", d => {
+                if (genre.toLowerCase() == genreFilter) return colorGenre(genreFilter)
+                else return '#1DB954'
+              })
 
             text.attr("opacity", function(d){
               if (targets.includes(d.name) || d.type=="Genre"){
@@ -301,6 +306,7 @@ d3.json("data/top_artists.json").then(function(dataset){
               else
                 return 0
             })
+              .attr("stroke", "#1DB954")
 
             text.attr("opacity", function(d){
               if (artist == d.name || d.type == "Genre"){
@@ -317,12 +323,12 @@ d3.json("data/top_artists.json").then(function(dataset){
           // If genre node, set links and apply filter.
           if (d3.select(this).data()[0]['type'] == "Genre") {
             clickedNode = d3.select(this)
+            genreFilter = clickedNode.data()[0]['name'].toLowerCase()
+            
             link.attr('stroke-opacity', 0)
             colorLinks(clickedNode)
 
-            genreFilter = clickedNode.data()[0]['name'].toLowerCase()
-            var selection = "rect[genre=" + "'" + genreFilter + "']"
-            
+            var selection = "rect[genre=" + "'" + genreFilter + "']"          
             clickedBar = d3.select("#barchart").select(selection)
             // First deal with bar chart by resetting and editing clicked bar.
             d3.select("#barchart")
@@ -384,7 +390,7 @@ function colorLinks(clickedNode) {
 
     node.attr("fill", function(d){
       if (targets.includes(d.name) || d.name == genre)
-        return '#1DB954'
+        return colorGenre(genreFilter)
       else
         return 'white'
     })
@@ -395,6 +401,7 @@ function colorLinks(clickedNode) {
       else
         return 0
     })
+      .attr("stroke", colorGenre(genreFilter))
 
     text.attr("opacity", function(d){
       if (targets.includes(d.name) || d.type=="Genre"){

@@ -2,7 +2,7 @@ genreFilter = "all"
 var clickedData = null
 var clickedPoints = null
 let colorGenre = d3.scaleOrdinal()
-                    .domain(["all", "country", "folk", "funk", "hip hop", "indie", 
+                    .domain(["", "country", "folk", "funk", "hip hop", "indie", 
                     "jazz", "latin", "pop", "punk", "r&b", "rock", "soul", "trap", "rap"])
                     .range(["#1DB954", "#EC6E3D", "#F7CFD3", "#F3E357", "#5D8F7F", "#DAF882", 
                             "#91C155", "#E57A9F", "#DC3A9A", "#F5C774", "#A6C2D0", 
@@ -114,6 +114,7 @@ d3.csv("data/spotify_data.csv").then(function(data) {
 
     var plots = ["plot1", "plot2", "plot3"]
 
+
     // Plot all circles
    plots.forEach(element => {
         var dots = svg.selectAll(element)
@@ -124,7 +125,9 @@ d3.csv("data/spotify_data.csv").then(function(data) {
             //.attr("cy", d => attrScales[element].y(yAccessor(d)))
             .attr("cx", d => attrScales[element].x(xAccessor(d)))
             .attr("cy", d => attrScales[element].y(+d[attrScales[element].attr]))
-            .attr("fill", colorGenre(genreFilter))
+            // This long line converts our genre attribute to an array and picks the first element. 
+            .attr("fill", d => colorGenre(d['General_Genre'].replace(/[\[\]']/g, "")
+                                .split(",").map(item => item.trim())[0]))
             .attr("id", d => d['Song ID'])
             .attr("plot", element)
             .attr("r", 4)
@@ -132,7 +135,7 @@ d3.csv("data/spotify_data.csv").then(function(data) {
             .on('mouseover', function() {
                 d3.select(this)
                     .attr("fill", "white")
-                
+
                 var hoverData = d3.select(this).data()[0]
                 // Update song info to point being hovered over
                 songInfo
@@ -148,7 +151,11 @@ d3.csv("data/spotify_data.csv").then(function(data) {
                 // Only want to reset if its not the clicked point
                 if (clickedData == null || d3.select(this).attr("id") != clickedData["Song ID"]) {
                     d3.select(this)
-                        .attr("fill", colorGenre(genreFilter))
+                        .attr("fill", d => {
+                            if (genreFilter == "all") return colorGenre(d['General_Genre'].replace(/[\[\]']/g, "")
+                                    .split(",").map(item => item.trim())[0])
+                            else return colorGenre(genreFilter)
+                        })
                 }
                 // Reset to songdata of clicked point.
                 if (clickedData != null) {
@@ -167,7 +174,11 @@ d3.csv("data/spotify_data.csv").then(function(data) {
                 // Need to reset all other circles before highlighting new ones.
                 svg.selectAll("circle").each(function() {
                     d3.select(this)
-                        .attr("fill", colorGenre(genreFilter))
+                        .attr("fill", d => {
+                            if (genreFilter == "all") return colorGenre(d['General_Genre'].replace(/[\[\]']/g, "")
+                                        .split(",").map(item => item.trim())[0])
+                            else return colorGenre(genreFilter)
+                        })
                         // Only set size back to 4 if they fit the filter.
                         .attr("r", function() { 
                                 if (genreFilter == "all" || genreFilter == "all (genre)") return 4 
@@ -219,7 +230,7 @@ d3.csv("data/spotify_data.csv").then(function(data) {
     d3.selectAll(".attrSelect")
         .on('mouseover', function() {
             description
-                .style("left", parseInt(d3.select(this).style("left")) + 130 + "px")
+                .style("left", parseInt(d3.select(this).style("left")) + 150 + "px")
                 .style("top", parseInt(d3.select(this).style("top")) + 20 + "px")
                 .text(attrDescriptions[d3.select(this).property("value")])
                 .style("visibility", "visible")
@@ -293,7 +304,11 @@ d3.csv("data/spotify_data.csv").then(function(data) {
             })
             .attr("fill", d => {
                 if (clickedData != null && d['Song ID'] == clickedData['Song ID']) return 'white'
-                else return colorGenre(genreFilter) 
+                else {
+                    if (genreFilter == "all") return colorGenre(d['General_Genre'].replace(/[\[\]']/g, "")
+                                .split(",").map(item => item.trim())[0])
+                    else return colorGenre(genreFilter) 
+                } 
             })
         
         // First deal with bar chart by resetting and editing clicked bar.
