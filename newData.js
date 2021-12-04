@@ -292,6 +292,8 @@ d3.csv("data/datawithdatesandgenrecorrect.csv").then(function(dataset){
     const highestPositionData = [countryPosAvg, folkPosAvg, funkPosAvg, hiphopPosAvg, indiePosAvg, jazzPosAvg, latinPosAvg, popPosAvg, punkPosAvg, rbPosAvg, rockPosAvg, soulPosAvg]
     const timesChartedData = [countryTimesCharted, folkTimesCharted, funkTimesCharted, hiphopTimesCharted, indieTimesCharted, jazzTimesCharted, latinTimesCharted, popTimesCharted, punkTimesCharted, rbTimesCharted, rockTimesCharted, soulTimesCharted]
 
+    const newOrderHP = highestPositionData.sort(function(a,b){return a-b})
+    const newOrderTC = timesChartedData.sort(function(a,b){return a-b})
 
 var xScale = d3.scaleBand()
     .domain(genresChart)
@@ -311,7 +313,7 @@ var g = svg.append("g")
             .attr("transform", "translate(" + 100 + "," + 100 + ")");
 //spearmint, fuchsia, citric, white, black, other colors
 //var color = ["#e75e2b", "#bc2be7", "#56e72b", "#4b917d", "#914b5f", "#82914b", "#3748f0", "#f037a5", "#cdf564", "#5a4b91", "#f56484", "#8c64f5"]
-var color = ["#EC6E3D", "#F7CFD3", "#F3E357", "#5D8F7F", "#DAF882", "#91C155", "#E57A9F", "#DC3A9A", "#F5C774", "#A6C2D0", "#EB5540", "#6399EE"]
+var color = ["#F3E357", "#EC6E3D", "#EB5540", "#5D8F7F", "#91C155", "#A6C2D0", "#F7CFD3", "#DC3A9A", "#E57A9F", "#F5C774", "#6399EE", "#DAF882"]
 
 var nameSelected = timesChartedData
 var yAxisLabel = 'Average # of times in top charts'
@@ -419,41 +421,32 @@ var yAxisTitle = svg.append('text')
       .attr("font-family", "Helvetica")  
       
 
-
-
-
-// var LabelXAxis = svg.append('text')
-//       .call(yAxisgen)
-//       .attr('x', -(dimensions.height / 2) - dimensions.margin)
-//       .attr('y', dimensions.margin / 2.4)
-//       .attr('transform', 'rotate(-90)')
-//       .attr('text-anchor', 'middle')
-//       .text('Love meter (%)')
-
-// svg.append('text')
-//     .call(xAxisgen)
-//       .attr('x', dimensions.width / 2 + dimensions.margin)
-//       .attr('y', 40)
-//       .attr('text-anchor', 'middle')
-//       .text('Most loved programming languages in 2018')
-
-
-
-
-
     //times charted data
 d3.select("#timescharted").on('click', function(){
-    yAxisLabel = 'Average # of times in top charts'
+    var genresChart = ["funk", "country", "rock", "hip hop", "jazz", "r&b", "folk", "pop", "latin", "punk", "soul", "indie"]
+    var color = ["#F3E357", "#EC6E3D", "#EB5540", "#5D8F7F", "#91C155", "#A6C2D0", "#F7CFD3", "#DC3A9A", "#E57A9F", "#F5C774", "#6399EE", "#DAF882"]
+    yAxisLabel = '# of times appeared in top charts'
     nameSelected = timesChartedData
+    xScale
+        .domain(genresChart)
+    xAxis.transition().duration(5000)
+        .call(xAxisgen)
     yScale
         .domain([0, d3.max(timesChartedData)])
     yAxisgen.scale(yScale)
     yAxis.transition().duration(5000)
     .call(yAxisgen)
+    yAxisTitle
+    .text(yAxisLabel)
     
     bars.transition().duration(5000)
         .attr("y", (d,i) => yScale(timesChartedData[i]))
+        .attr("x", (d,i) => xScale(genresChart[i]))
         .attr("height", (d,i) => dimensions.height - dimensions.margin.bottom - yScale(timesChartedData[i]))
+        
+        .attr("fill", function(d, i){
+            return color[i%12]
+        })
         
 
     editText
@@ -465,21 +458,48 @@ d3.select("#timescharted").on('click', function(){
     //back to highest position - want average to be small (1 means #1 in chart)
 d3.select("#highestpos").on('click', function(){
 
-        yAxisLabel = 'Avg highest position in top charts'
-        console.log()
+    var color = ["#F7CFD3","#F5C774","#E57A9F","#DC3A9A","#A6C2D0","#DAF882","#5D8F7F","#EB5540","#6399EE","#91C155","#EC6E3D","#F3E357"]
+    var genresChart = ["folk", "punk", "latin", "pop", "r&b", "indie", "hip hop", "rock", "soul", "jazz", "country", "funk"]
+
+        yAxisLabel = 'Avg highest position of songs in top charts'
         nameSelected = highestPositionData
+        
+        xScale
+            .domain(genresChart)
+        xAxisgen
+            .scale(xScale)
+
+        xAxis.transition().duration(5000)
+        .call(xAxisgen)
+        .style("transform", `translateY(${dimensions.height - dimensions.margin.bottom}px)`)
+        .selectAll("text")
+        .attr("transform", "rotate(-65)")
+        .attr("dx", "-1.85em")
+        .attr("dy", "0em")
+        .style("stroke", "white")
+        .style("font-size", 15)
+        
+
+
+            
+        // .selectAll('text')
         yScale
             .domain([d3.max(highestPositionData)+10, 0])
         yAxisgen.scale(yScale)
         yAxis.transition().duration(5000)
             .call(yAxisgen)
         yAxisTitle
-            .text('Avg highest position of songs in top charts')
+            .text(yAxisLabel)
 
     
     bars.transition().duration(5000)
         .attr("y", (d,i) => yScale(highestPositionData[i]))
+        .attr("x", (d,i) => xScale(genresChart[i]))
         .attr("height", (d, i) => dimensions.height - dimensions.margin.bottom - yScale(highestPositionData[i]))
+        .attr("width", xScale.bandwidth())
+        .attr("fill", function(d, i){
+            return color[i%12]
+        })
 
     editText
         .text(function(d,i){
@@ -490,50 +510,6 @@ d3.select("#highestpos").on('click', function(){
 
     
     })
-    // var ascendingHighestPositionValues = highestPositionData.sort(function(a,b){return a-b})
-    // var ascendingHighestPositionGenre = ["folk", "punk", "latin", "pop", "r&b", "indie", "hip hop", "rock", "soul", "jazz", "country", "funk"]
-//     //greatest to least
-// var descendingHighestPositionValues = highestPositionData.sort(function(a,b){return b-a})
-// // console.log(newDescendingOrder)
-// var descendingHighestPositionGenre = ["funk", "country", "jazz", "soul", "rock", "hip hop", "indie", "r&b", "pop", "latin", "punk", "folk"]
-// // //least to greatest
-
-
-// var descendingTimesChartedValues = timesChartedData.sort(function(a,b){return b-a})
-
-
-// var ascendingTimesChartedValues = timesChartedData.sort(function(a,b){return a-b})
-
-    var allGroup = ['Select One','Ascending', 'Descending']
-
-    d3.select("#selectButton")
-        .selectAll('myOptions')
-        .data(allGroup)
-        .enter()
-        .append('option')
-        .text(function(d) {return d;})
-        .attr("value", function(d) {return d;})
-        // if (nameSelected = highestPositionData){
-        //     if (d = allGroup[1]){
-        //         var ascendingHighestPositionValues = highestPositionData.sort(function(a,b){return a-b})
-        //         var ascendingHighestPositionGenre = ["folk", "punk", "latin", "pop", "r&b", "indie", "hip hop", "rock", "soul", "jazz", "country", "funk"]
-        //         svg.selectAll("rect")
-        //         xScale
-        //             .domain(ascendingHighestPositionGenre)
-        //         bars.transition().duration(5000)
-        //             .attr("x", (d,i) => xScale(ascendingHighestPositionValues[i]))
-        //             //.attr("height", (d,i) => dimensions.height - dimensions.margin.bottom - yScale(timesChartedData[i]))
-                
-        //     }
-        // }
-        //     else{
-
-        //     }
-
-        // }
-        // else{
-
-        // }
 
 
 
