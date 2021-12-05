@@ -288,8 +288,9 @@ d3.csv("data/datawithdatesandgenrecorrect.csv").then(function(dataset){
 
 
 
-    //const genresChart = ["country", "folk", "funk", "hip hop", "indie", "jazz", "latin", "pop", "punk", "r&b", "rock", "soul"]
-    var genresChart = ["funk", "country", "rock", "hip hop", "jazz", "r&b", "folk", "pop", "latin", "punk", "soul", "indie"]
+    var genresChart = ["funk", "country", "rock", "hip hop", "jazz", "r&b", "folk", "pop", "latin", "punk", "soul", "indie"]
+    var genresChartTC = ["funk", "country", "rock", "hip hop", "jazz", "r&b", "folk", "pop", "latin", "punk", "soul", "indie"]
+    var genresChartHP = ["folk", "punk", "latin", "pop", "r&b", "indie", "hip hop", "rock", "soul", "jazz", "country", "funk"]
     const highestPositionData = [countryPosAvg, folkPosAvg, funkPosAvg, hiphopPosAvg, indiePosAvg, jazzPosAvg, latinPosAvg, popPosAvg, punkPosAvg, rbPosAvg, rockPosAvg, soulPosAvg]
     const timesChartedData = [countryTimesCharted, folkTimesCharted, funkTimesCharted, hiphopTimesCharted, indieTimesCharted, jazzTimesCharted, latinTimesCharted, popTimesCharted, punkTimesCharted, rbTimesCharted, rockTimesCharted, soulTimesCharted]
 
@@ -312,8 +313,7 @@ var yAxisgen = d3.axisLeft().scale(yScale)
 
 var g = svg.append("g")
             .attr("transform", "translate(" + 100 + "," + 100 + ")");
-//spearmint, fuchsia, citric, white, black, other colors
-//var color = ["#e75e2b", "#bc2be7", "#56e72b", "#4b917d", "#914b5f", "#82914b", "#3748f0", "#f037a5", "#cdf564", "#5a4b91", "#f56484", "#8c64f5"]
+
 var color = ["#F3E357", "#EC6E3D", "#EB5540", "#5D8F7F", "#91C155", "#A6C2D0", "#F7CFD3", "#DC3A9A", "#E57A9F", "#F5C774", "#6399EE", "#DAF882"]
 
 var nameSelected = timesChartedData
@@ -379,13 +379,11 @@ var editText = svg.selectAll("rect")
     .text(function(d,i){
         return "Avg # of times charted is " +nameSelected[i];
     })
-
-
-    //.attr("fill", "white")
     
         
 
 var xAxis = svg.append("g")
+      .attr("class", "xaxis")
       .call(xAxisgen)
       .style("transform", `translateY(${dimensions.height - dimensions.margin.bottom}px)`)
       .selectAll("text")
@@ -422,16 +420,24 @@ var yAxisTitle = svg.append('text')
       .attr("font-family", "Helvetica")  
       
 
-    //times charted data
+       //times charted data
 d3.select("#timescharted").on('click', function(){
-    var genresChart = ["funk", "country", "rock", "hip hop", "jazz", "r&b", "folk", "pop", "latin", "punk", "soul", "indie"]
+
+    genresChart = genresChartTC
     var color = ["#F3E357", "#EC6E3D", "#EB5540", "#5D8F7F", "#91C155", "#A6C2D0", "#F7CFD3", "#DC3A9A", "#E57A9F", "#F5C774", "#6399EE", "#DAF882"]
     yAxisLabel = '# of times appeared in top charts'
     nameSelected = timesChartedData
+
     xScale
-        .domain(genresChart)
-    xAxis.transition().duration(5000)
+        .domain(genresChartTC)
+    xAxisgen
+        .scale(xScale)
+
+    svg.select(".xaxis")
+        .transition().duration(5000)
         .call(xAxisgen)
+
+
     yScale
         .domain([0, d3.max(timesChartedData)])
     yAxisgen.scale(yScale)
@@ -442,7 +448,7 @@ d3.select("#timescharted").on('click', function(){
     
     bars.transition().duration(5000)
         .attr("y", (d,i) => yScale(timesChartedData[i]))
-        .attr("x", (d,i) => xScale(genresChart[i]))
+        .attr("x", (d,i) => xScale(genresChartTC[i]))
         .attr("height", (d,i) => dimensions.height - dimensions.margin.bottom - yScale(timesChartedData[i]))
         
         .attr("fill", function(d, i){
@@ -460,30 +466,20 @@ d3.select("#timescharted").on('click', function(){
 d3.select("#highestpos").on('click', function(){
 
     var color = ["#F7CFD3","#F5C774","#E57A9F","#DC3A9A","#A6C2D0","#DAF882","#5D8F7F","#EB5540","#6399EE","#91C155","#EC6E3D","#F3E357"]
-    var genresChart = ["folk", "punk", "latin", "pop", "r&b", "indie", "hip hop", "rock", "soul", "jazz", "country", "funk"]
+    
+    genresChart = genresChartHP
 
         yAxisLabel = 'Avg highest position of songs in top charts'
         nameSelected = highestPositionData
         
         xScale
-            .domain(genresChart)
+            .domain(genresChartHP)
         xAxisgen
             .scale(xScale)
 
-        xAxis.transition().duration(5000)
-        .call(xAxisgen)
-        .style("transform", `translateY(${dimensions.height - dimensions.margin.bottom}px)`)
-        .selectAll("text")
-        .attr("transform", "rotate(-65)")
-        .attr("dx", "-1.85em")
-        .attr("dy", "0em")
-        .style("stroke", "white")
-        .style("font-size", 15)
-        
-
-
-            
-        // .selectAll('text')
+        svg.select(".xaxis")
+            .transition().duration(5000)
+            .call(xAxisgen)
         yScale
             .domain([d3.max(highestPositionData)+10, 0])
         yAxisgen.scale(yScale)
@@ -495,9 +491,8 @@ d3.select("#highestpos").on('click', function(){
     
     bars.transition().duration(5000)
         .attr("y", (d,i) => yScale(highestPositionData[i]))
-        .attr("x", (d,i) => xScale(genresChart[i]))
+        .attr("x", (d,i) => xScale(genresChartHP[i]))
         .attr("height", (d, i) => dimensions.height - dimensions.margin.bottom - yScale(highestPositionData[i]))
-        .attr("width", xScale.bandwidth())
         .attr("fill", function(d, i){
             return color[i%12]
         })
