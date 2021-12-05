@@ -424,6 +424,7 @@ var yAxisTitle = svg.append('text')
 d3.select("#timescharted").on('click', function(){
 
     genresChart = genresChartTC
+    genresChart = ["funk", "country", "rock", "hip hop", "jazz", "r&b", "folk", "pop", "latin", "punk", "soul", "indie"]
     var color = ["#F3E357", "#EC6E3D", "#EB5540", "#5D8F7F", "#91C155", "#A6C2D0", "#F7CFD3", "#DC3A9A", "#E57A9F", "#F5C774", "#6399EE", "#DAF882"]
     yAxisLabel = '# of times appeared in top charts'
     nameSelected = timesChartedData
@@ -468,6 +469,7 @@ d3.select("#highestpos").on('click', function(){
     var color = ["#F7CFD3","#F5C774","#E57A9F","#DC3A9A","#A6C2D0","#DAF882","#5D8F7F","#EB5540","#6399EE","#91C155","#EC6E3D","#F3E357"]
     
     genresChart = genresChartHP
+    genresChart = ["folk", "punk", "latin", "pop", "r&b", "indie", "hip hop", "rock", "soul", "jazz", "country", "funk"]
 
         yAxisLabel = 'Avg highest position of songs in top charts'
         nameSelected = highestPositionData
