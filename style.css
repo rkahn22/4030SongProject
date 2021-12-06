@@ -30,6 +30,33 @@ h1 {
     padding-top: 20px;
 }
 
+h3 {
+    text-align: left;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;  
+    font-size: 50px;
+    line-height: 0;
+    padding-top: 20px;
+}
+
+#demo{
+    position: absolute;
+    top: 1600px;
+    left: 1100px;
+    padding-bottom: 50px;
+}
+
+#demoCaption{
+    text-align: center;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;  
+    font-size: 50px;
+    line-height: 0;
+    padding-top: 20px;
+}
+
 #subtitle {
     text-align: left;
     color: white;
