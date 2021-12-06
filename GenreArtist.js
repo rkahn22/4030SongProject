@@ -173,17 +173,9 @@ d3.json("data/top_artists.json").then(function(dataset){
         .selectAll("line")
         .data(links)
         .join("line")
-        .attr("stroke-opacity", d => d.source.name == "Pop" ? 1 : 0);
+        .attr("stroke-opacity", 0);
 
     console.log(link)
-
-    var popLinks = links.filter(function(e){
-      return e.source.name == "Pop"
-    })
-
-    var popArtists = popLinks.map(function(z){
-      return z.target.name
-    })
 
     node = svg.append("g")
       .attr("stroke", "white")
@@ -199,12 +191,11 @@ d3.json("data/top_artists.json").then(function(dataset){
       })
       .attr("cx", d=>d.x)
        .attr("cy", d=>d.y)
-       .attr("fill", function(d){
-        if (popArtists.includes(d.name) || d.name == "Pop")
+       .attr("fill", "white")
+        /*if (popArtists.includes(d.name) || d.name == "Pop")
           return '#1DB954'
         else
-          return 'white'
-      })
+          return 'white'*/
       .attr("name", d => d.name.toLowerCase())
       
        
@@ -222,7 +213,7 @@ d3.json("data/top_artists.json").then(function(dataset){
                 .attr("font-weight", "bold")
                 .attr("fill", "white")
                 .attr("opacity", function(d){
-                  if (popArtists.includes(d.name) || d.type == "Genre")
+                  if (d.type == "Genre")
                     return 1
                   else
                     return 0
