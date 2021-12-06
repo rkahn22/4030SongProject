@@ -412,7 +412,7 @@ var yAxis = svg.append("g")
       .style("font-size", 15)
 
 var yAxisTitle = svg.append('text')
-      .attr('x', -dimensions.margin.left-50)
+      .attr('x', -dimensions.margin.left-30)
       .attr('y', -dimensions.margin.top+22)
       .attr('text-anchor', 'end')
       .attr('transform', 'rotate(-90)')
