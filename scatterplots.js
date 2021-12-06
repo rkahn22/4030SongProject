@@ -329,6 +329,7 @@ d3.csv("data/spotify_data.csv").then(function(data) {
             clickedNode.attr("fill", "white")
             link.attr("stroke-opacity", 0)
             clickedNode = null
+            text.attr("opacity", 0)
         } else {
             var nodeSelection = "circle[name=" + "'" + genreFilter + "']"
             clickedNode = d3.select("#topArtists").select(nodeSelection)
