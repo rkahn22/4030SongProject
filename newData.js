@@ -331,6 +331,8 @@ var bars = svg.selectAll("rect")
     .attr("fill", function(d, i){
         return color[i%12]
     })
+    .attr("stroke", "white")
+    .attr("stroke-width", "0")
     .attr("genre", (d, i) => genresChart[i])
     .on('mouseenter', function(actual,i){
         d3.select(this).attr('opacity', 0.5)
@@ -429,6 +431,9 @@ d3.select("#timescharted").on('click', function(){
     yAxisLabel = '# of times appeared in top charts'
     nameSelected = timesChartedData
 
+    bars.attr("genre", (d, i) => genresChart[i])
+    clickedBar = d3.select("#barchart").select("rect[genre=" + "'" + genreFilter + "']")
+
     xScale
         .domain(genresChartTC)
     xAxisgen
@@ -446,7 +451,7 @@ d3.select("#timescharted").on('click', function(){
     .call(yAxisgen)
     yAxisTitle
     .text(yAxisLabel)
-    
+
     bars.transition().duration(5000)
         .attr("y", (d,i) => yScale(timesChartedData[i]))
         .attr("x", (d,i) => xScale(genresChartTC[i]))
@@ -455,7 +460,14 @@ d3.select("#timescharted").on('click', function(){
         .attr("fill", function(d, i){
             return color[i%12]
         })
-        
+        .attr("stroke-width", (d,i) => {
+            if (genresChart[i] == genreFilter) return '3'
+            else return '0'
+        })
+        .attr("opacity", (d,i) => {
+            if (genresChart[i] == genreFilter) return .5
+            else return 1.0
+        })
 
     editText
         .text(function(d,i){
@@ -470,6 +482,9 @@ d3.select("#highestpos").on('click', function(){
     
     genresChart = genresChartHP
     genresChart = ["folk", "punk", "latin", "pop", "r&b", "indie", "hip hop", "rock", "soul", "jazz", "country", "funk"]
+
+    bars.attr("genre", (d, i) => genresChart[i])
+    clickedBar = d3.select("#barchart").select("rect[genre=" + "'" + genreFilter + "']")
 
         yAxisLabel = 'Avg highest position of songs in top charts'
         nameSelected = highestPositionData
@@ -489,7 +504,6 @@ d3.select("#highestpos").on('click', function(){
             .call(yAxisgen)
         yAxisTitle
             .text(yAxisLabel)
-
     
     bars.transition().duration(5000)
         .attr("y", (d,i) => yScale(highestPositionData[i]))
@@ -497,6 +511,14 @@ d3.select("#highestpos").on('click', function(){
         .attr("height", (d, i) => dimensions.height - dimensions.margin.bottom - yScale(highestPositionData[i]))
         .attr("fill", function(d, i){
             return color[i%12]
+        })
+        .attr("stroke-width", (d,i) => {
+            if (genresChart[i] == genreFilter) return '3'
+            else return '0'
+        })
+        .attr("opacity", (d,i) => {
+            if (genresChart[i] == genreFilter) return .5
+            else return 1.0
         })
 
     editText
