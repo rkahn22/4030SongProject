@@ -230,7 +230,7 @@ d3.csv("data/spotify_data.csv").then(function(data) {
     d3.selectAll(".attrSelect")
         .on('mouseover', function() {
             description
-                .style("left", parseInt(d3.select(this).style("left")) + 150 + "px")
+                .style("left", parseInt(d3.select(this).style("left")) -70 + "px")
                 .style("top", parseInt(d3.select(this).style("top")) + 20 + "px")
                 .text(attrDescriptions[d3.select(this).property("value")])
                 .style("visibility", "visible")
