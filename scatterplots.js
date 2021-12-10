@@ -279,12 +279,12 @@ d3.csv("data/spotify_data.csv").then(function(data) {
         })
 
     // Create genre options in dropdown select
-    d3.select("#genres").selectAll("option")
-        .data(genres)
-        .enter()
-        .append("option")
-        .text(d => d)
-        .attr("value", d => d.toLowerCase())
+    // d3.select("#genres").selectAll("option")
+    //     .data(genres)
+    //     .enter()
+    //     .append("option")
+    //     .text(d => d)
+    //     .attr("value", d => d.toLowerCase())
 
     // Update when select is changed.
     d3.select("#genres").on('change', function() {
