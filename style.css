@@ -77,7 +77,7 @@ h3 {
 #popLength {
     position: absolute;
     top: 900px;
-    left: 1900px;
+    left: 1700px;
     text-anchor: middle;
     transform: scale(1.1);
 }
@@ -85,7 +85,7 @@ h3 {
 #artists {
     position: absolute;
     top: -20px;
-    left: 1850px;
+    left: 1650px;
     text-anchor: middle;
     transform: scale(1.1);
 }
