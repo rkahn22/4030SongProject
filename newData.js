@@ -5,7 +5,7 @@ d3.csv("data/datawithdatesandgenrecorrect.csv").then(function(dataset){
   //console.log(dataset)
 
   var dimensions = {
-      width: 600,
+      width: 500,
       height: 450,
       margin: {
           top: 10,
