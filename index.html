@@ -1,9 +1,21 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <link id="pagestyle" rel="stylesheet" type="text/css" href = "style.css">
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    function layoutHandler(){
+        var styleLink = document.getElementById("pagestyle");
+        if(window.innerWidth < 1200){
+          styleLink.setAttribute("href", "medium.css");
+        }
+        else{
+          styleLink.setAttribute("href", "style.css");
+        }
+    }
+    window.onresize = layoutHandler;
+    layoutHandler();
     <title>Tune Tracker</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900" rel="stylesheet">
