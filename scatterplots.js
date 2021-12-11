@@ -14,8 +14,8 @@ d3.csv("data/spotify_data.csv").then(function(data) {
     var nCols = 3 
 
     var dimensions = {
-        width: 1350,
-        height: 850,
+        width: 950,
+        height: 650,
         margin: {
             top: 30,
             bottom: 50,
